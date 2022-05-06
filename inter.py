@@ -23,13 +23,8 @@ class PlayerInterface:
         self.an_image = PhotoImage(file="images/battle_fill.png") #pyimage1
         self.logo = PhotoImage(file="images/smt_logo.png") #pyimage2
         self.board_view=[]
-        #for y in range(2):
-           # a_column = [] # column
-            #for x in range(2):
         aLabel = Label(self.table_frame, bd = 0, image=self.an_image)
-            #    aLabel.grid(row=x , column=y)
-             #   a_column.append(aLabel)
-        #self.board_view.append(a_column)
+
         self.logo_label = Label(self.table_frame, bd = 0, image=self.logo)
         self.logo_label.grid(row=0, column=3)
         self.message_label = Label(self.message_frame, bg="gray", text=' Shin Megami Tem 6 - Press Turn Battle', font="arial 15")
@@ -37,12 +32,34 @@ class PlayerInterface:
         
         self.startb = Button(self.message_frame,
                            text="Começar",
-                           command=self.clear_frame)
+                           command=self.fill_character)
         self.endb = Button(self.message_frame,
                             text="Sair",
                             command=lambda:exit())
         self.startb.grid(row=3, column=6)
         self.endb.grid(row=4, column=6)
+    def fill_character(self):
+        self.clear_frame()
+        p1 = Label(self.table_frame, text= "Player 1", width=15, font=("Arial", 25))
+        p2 = Label(self.table_frame, text= "Player 2", width=15, font=("Arial", 25))
+        p1.grid(row = 0, column = 0)
+        p2.grid(row = 0, column = 80)
+        
+        p1b = Button(self.message_frame, text="PLAYER 1", bg="red", font=("Arial",25), height=5, width=15)
+        p2b = Button(self.message_frame, text="PLAYER 2", bg="black",fg="white", font=("Arial",25), height=5, width=15)
+        p1b.grid(row=1, column=0)
+        p2b.grid(row=1, column=80)
+        
+        self.liu_image = PhotoImage(file="images/liu.png")
+        for y in range(2):
+            a_column = [] # column
+            for x in range(3):
+                dliu = Label(self.message_frame, bd = 0, image=self.liu_image)
+                dliu.grid(row=x+1 , column=y+1)
+        confirm_bp1 = Button(self.message_frame, font=("Arial", 10),  text="CONFIRM", bg="gray", height=2, width=15)
+        confirm_bp2 = Button(self.message_frame, font=("Arial", 10),  text="CONFIRM", bg="gray", height=2, width=15)
+        confirm_bp1.grid(row=2, column=0)
+        confirm_bp2.grid(row=2, column=80)
 
     def print_hello(self):
         print("hello world")
