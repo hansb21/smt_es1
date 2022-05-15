@@ -25,12 +25,12 @@ class BattleInterface:
         self.entity_frame.place(x=0, y=528)
 
         #BOTOES
-        self.ataque_button = Button(self.menu_frame ,bg="grey99", text="Ataque")
-        self.magia_button = Button(self.menu_frame ,bg="grey99", text="Magias")
-        self.item_button = Button(self.menu_frame ,bg="grey99", text="Itens")
-        self.fundir_button = Button(self.menu_frame ,bg="grey99", text="Fusão")
-        self.invocar_button = Button(self.menu_frame ,bg="grey99", text="Invocar")
-        self.passar_button = Button(self.menu_frame ,bg="grey99", text="Passar Turno")
+        self.ataque_button = Button(self.menu_frame ,bg="grey99", text="Ataque", command=lambda:self.debug_button("Ataque"))
+        self.magia_button = Button(self.menu_frame ,bg="grey99", text="Magias", command=lambda:self.debug_button("Ataque mágico"))
+        self.item_button = Button(self.menu_frame ,bg="grey99", text="Itens", command=lambda:self.debug_button("Uso de item"))
+        self.fundir_button = Button(self.menu_frame ,bg="grey99", text="Fusão", command=lambda:self.debug_button("Ritual de fusão") )
+        self.invocar_button = Button(self.menu_frame ,bg="grey99", text="Invocar", command=lambda:self.debug_button("Ritual de invocação"))
+        self.passar_button = Button(self.menu_frame ,bg="grey99", text="Passar Turno", command=lambda:self.debug_button("Passagem de turno"))
 
         self.lista_botoes = [self.ataque_button, self.magia_button, self.item_button, self.fundir_button, self.invocar_button,self.passar_button]
         for i, botao in enumerate(self.lista_botoes):
@@ -92,5 +92,8 @@ class BattleInterface:
         self.lista_time_labels = [self.time1_label,self.time2_label,self.time3_label,self.time4_label]
         for timeLabel in self.lista_time_labels:
             timeLabel.place(relheight=1, relwidth=1)
+        
+    def debug_button(self, escolha):
+        print(f"{escolha} realizado sucesso")
 
 battle_interface = BattleInterface()
