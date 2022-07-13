@@ -85,7 +85,9 @@ class BattleInterface:
     def defineLabels(self):
         #LABEL DOS TURNOS
         self.turnos_label = Label(self.turnos_frame, text="5")
-        self.turnos_label.place(relheight=1, relwidth=1)
+
+        #Entidade atual
+        self.entidade_atual_label = Label(self.entidade_atual_frame, text="Teste")
 
         #LABELS DOS INIMIGOS
         self.inimigo1_label = Label(self.inimigo1_frame, text="Imagem 1")
@@ -140,7 +142,11 @@ class BattleInterface:
 
         self.turnos_frame.place(x=0,y=275, width=128,height=55)
 
+        self.turnos_label.place(relheight=1, relwidth=1)
+
         self.entidade_atual_frame.place(x=0, y=0,width=230, height=528)
+
+        self.entidade_atual_label.place(x=0, y=0,width=230, height=528)
 
         for i, inimigoFrame in enumerate(self.lista_inimigo_frames):
             calc_pos=230*i+230
