@@ -1,99 +1,124 @@
-from tkinter import *
-from turtle import width
+from jogador import *
+from entidade import Entidade
 
-class BattleInterface:
-    def __init__(self):
-        self.main_window = Tk()
-        self.fill_main_window()
-        self.main_window.mainloop()
+class Batalha:
+    def __init__(self, batalhaEmAndamento: bool, estagio: str, jogador1: Jogador, jogador2: Jogador, jogadorAtual: Jogador, jogadorOutro: Jogador, todosHumanos: list, demoniosEscolha: list, demonioFusao: list):
+        self.batalhaEmAndamento = batalhaEmAndamento
+        self.estagio = estagio
+        self.jogador1 = jogador1
+        self.jogador2 = jogador2
+        self.jogadorAtual = jogadorAtual
+        self.jogadorOutro = jogadorOutro
+        self.todosHumanos = todosHumanos
+        self.demoniosEscolha = demoniosEscolha
+        self.demonioFusao = demonioFusao
 
-    def fill_main_window(self):
-        self.main_window.title("Press Turn Battle")
-        #self.main_window.iconbitmap("images/icon.ico")
-        self.main_window.geometry("1280x720")
-        self.main_window.resizable(FALSE,FALSE)
-        #self.main_window["bg"]="gold3"
+    def iniciar(self) -> None:
+        pass
 
-        #FRAMES
-        self.menu_frame = Frame(self.main_window, bg="red", width=256, height=528)
-        self.menu_frame.place(x=0, y=0)
+    def sorteiaJogador(self) -> None:
+        pass
+    
+    def iniciarBatalha(self) -> None:
+        pass
 
-        self.field_frame = Frame(self.main_window, bg="green", width=1024, height=528)
-        self.field_frame.place(x=256, y=0)
+    def escolherHumanos(self) -> None:
+        pass
 
-        self.entity_frame = Frame(self.main_window, bg="blue", width=1280, height=192)
-        self.entity_frame.place(x=0, y=528)
+    def getHumanos(self, index: int) -> Entidade:
+        pass
 
-        #BOTOES
-        self.ataque_button = Button(self.menu_frame ,bg="grey99", text="Ataque", command=lambda:self.debug_button("Ataque"))
-        self.magia_button = Button(self.menu_frame ,bg="grey99", text="Magias", command=lambda:self.debug_button("Ataque mágico"))
-        self.item_button = Button(self.menu_frame ,bg="grey99", text="Itens", command=lambda:self.debug_button("Uso de item"))
-        self.fundir_button = Button(self.menu_frame ,bg="grey99", text="Fusão", command=lambda:self.debug_button("Ritual de fusão") )
-        self.invocar_button = Button(self.menu_frame ,bg="grey99", text="Invocar", command=lambda:self.debug_button("Ritual de invocação"))
-        self.passar_button = Button(self.menu_frame ,bg="grey99", text="Passar Turno", command=lambda:self.debug_button("Passagem de turno"))
+    def incluirHumano1(self, escolha: Entidade) -> None:
+        pass
 
-        self.lista_botoes = [self.ataque_button, self.magia_button, self.item_button, self.fundir_button, self.invocar_button,self.passar_button]
-        for i, botao in enumerate(self.lista_botoes):
-            calc_pos=70*i
-            botao.place(x=0, y=calc_pos, width=256, height=70)
+    def incluirHumano2(self, escolha: Entidade) -> None:
+        pass
 
-        #LABELFRAME DOS TURNOS
-        self.turnos_frame = LabelFrame(self.menu_frame, bd=5, text="Turnos")
-        self.turnos_frame.place(x=0,y=420, width=256,height=108)
+    def escolherDemonios(self) -> None:
+        pass
 
-        #LABEL DOS TURNOS
-        #substituir por um sistema de imagens dps
-        self.turnos_label = Label(self.turnos_frame, text="5")
-        self.turnos_label.place(relheight=1, relwidth=1)
+    def getDemonio(self, index: int) -> Entidade:
+        pass
 
-        #LABELFRAMES DOS INIMIGOS
-        #Usar como pai dos labels dos inimigos (não implementar agora)
-        self.inimigo1_frame = LabelFrame(self.field_frame, bd=5, text="Inimigo 1")
-        self.inimigo2_frame = LabelFrame(self.field_frame, bd=5, text="Inimigo 2")
-        self.inimigo3_frame = LabelFrame(self.field_frame, bd=5, text="Inimigo 3")
-        self.inimigo4_frame = LabelFrame(self.field_frame, bd=5, text="Inimigo 4")
+    def incluirDemonio1(self, escolha: Entidade) -> None:
+        pass
 
-        self.lista_inimigo_frames = [self.inimigo1_frame, self.inimigo2_frame, self.inimigo3_frame, self.inimigo4_frame]
-        for i, inimigoFrame in enumerate(self.lista_inimigo_frames):
-            calc_pos=256*i
-            inimigoFrame.place(x=calc_pos,y=0,width=256,height=528)
+    def incluirDemonio2(self, escolha: Entidade) -> None:
+        pass
 
-        #LABELS DOS INIMIGOS
-        #Colocar imagens dps
-        self.inimigo1_label = Label(self.inimigo1_frame, text="Imagem 1")
-        self.inimigo2_label = Label(self.inimigo2_frame, text="Imagem 2")
-        self.inimigo3_label = Label(self.inimigo3_frame, text="Imagem 3")
-        self.inimigo4_label = Label(self.inimigo4_frame, text="Imagem 4")
+    def usarItem(self) -> None:
+        pass
 
-        self.lista_inimigo_labels = [self.inimigo1_label, self.inimigo2_label, self.inimigo3_label, self.inimigo4_label]
-        for inimigoLabel in self.lista_inimigo_labels:
-            inimigoLabel.place(relheight=1, relwidth=1)
+    def escolherItem(self) -> int:
+        pass
+
+    def selecionarAlvoitem(itemIndex: int, local: int, entidadeIndex: int) -> list:
+        pass
+
+    def invocar(self) -> None:
+        pass
+
+    def definirTrocaReserva(self, index: int) -> int:
+        pass
+
+    def definirTrocaCampo(self, index: int, vazio: bool) -> int:
+        pass
+
+    def calcularTurnos(self, caso: str, resAtaque: string) -> None:
+        pass
+
+    def calculaCustoAtaque(self, resAtaque: str) -> int:
+        pass
+
+    def calculoCustoTurno(self, caso: str, custoAtaque: int) -> int:
+        pass
+
+    def mudaJogadorAtual(self) -> None:
+        pass
+
+    def ataque(self) -> None:
+        pass
+
+    def validarAtaque(self, ataqueIndex: int) -> None:
+        pass
+
+    def definirAlvo(self, index: int) -> None:
+        pass
+
+    def avaliarAtaque(self, tipoAtaque: Tipo, tipoAlvo: Tipo) -> str:
+        pass
+
+    def calcularModificadorDano(self, res: str) -> None:
+        pass
+
+    def fundir(self) -> None:
+        pass
+
+    def definirFusão1(self, material: Entidade, local: int) -> None:
+        pass
 
 
-        #LABELFRAMES DO TIME
-        #Usar como pai dos labels do time (não implementar agora)
-        self.time1_frame = LabelFrame(self.entity_frame, bd=5, text="Entidade 1")
-        self.time2_frame = LabelFrame(self.entity_frame, bd=5, text="Entidade 2")
-        self.time3_frame = LabelFrame(self.entity_frame, bd=5, text="Entidade 3")
-        self.time4_frame = LabelFrame(self.entity_frame, bd=5, text="Entidade 4")
+    def definirFusão2(self, material: Entidade, local: int) -> None:
+        pass
 
-        self.lista_time_frames = [self.time1_frame, self.time2_frame, self.time3_frame, self.time4_frame]
-        for i, timeFrame in enumerate(self.lista_time_frames):
-            calc_pos=320*i
-            timeFrame.place(x=calc_pos,y=0,width=320,height=192)
+    def validarFusao(self, material1: Entidade, material2: Entidade) -> bool:
+        pass
 
-        #LABELS DO TIME
-        #Colocar imagens dps
-        self.time1_label = Label(self.time1_frame, text="Imagem 1")
-        self.time2_label = Label(self.time2_frame, text="Imagem 2")
-        self.time3_label = Label(self.time3_frame, text="Imagem 3")
-        self.time4_label = Label(self.time4_frame, text="Imagem 4")
-        
-        self.lista_time_labels = [self.time1_label,self.time2_label,self.time3_label,self.time4_label]
-        for timeLabel in self.lista_time_labels:
-            timeLabel.place(relheight=1, relwidth=1)
-        
-    def debug_button(self, escolha):
-        print(f"{escolha} realizado sucesso")
+    def definirResultado(self, material1: Entidade, material2: Entidade, local: int) -> Entidade:
+        pass
 
-battle_interface = BattleInterface()
+    def definirLocalFusao(self, local1: int, local2: int) -> int:
+        pass
+
+    def avaliaVencedor(self) -> None:
+        pass
+
+    def verificaVencedor(self) -> Jogador:
+        pass
+
+    def defineEscolha(escolha: str) -> None:
+        pass
+
+    def executaEscolha(escolha: str) -> None:
+        pass
+

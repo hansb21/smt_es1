@@ -15,24 +15,24 @@ class Entidade:
         self.ehHumano = ehHumano,
         self.local = local
 
-def modificarVida(qtd: int) -> None:
+def modificarVida(self, qtd: int) -> None:
         pass
 
-    def modificarMagia(qtd: int) -> None:
+    def modificarMagia(self, self,qtd: int) -> None:
         pass
 
-    def reviver(qtd: int) -> None:
+    def reviver(self, qtd: int) -> None:
         pass
 
-    def getAtaques() -> list :
+    def getAtaques(self) -> list :
         return self.ataques
 
-    def getTipoEntidade() -> Tipo :
+    def getTipoEntidade(self) -> Tipo :
         return self.tipo
 
-    def getEhHumano() -> bool :
+    def getEhHumano(self) -> bool :
         return self.ehHumano
     
-    def getHpAtual() -> int :
+    def getHpAtual(self) -> int :
         return self.hp
 
