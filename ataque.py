@@ -1,4 +1,4 @@
-import tipo
+from tipo import Tipo
 
 class Ataque:
     def __init__(self, nome: str, tipo: Tipo, dano: int, custo: int):
