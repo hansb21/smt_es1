@@ -6,3 +6,6 @@ class Tipo:
         self.resistencia = resistencia
         self.repelir = repelir
         self.absorver = absorver
+
+    def getNome(self):
+        return self.nome

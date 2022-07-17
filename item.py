@@ -1,3 +1,6 @@
+#from ast import Str
+
+
 class Item:
     def __init__(self, nome: str, tipoItem: str, potencia: int, qtd: int):
         self.nome = nome
@@ -5,8 +8,14 @@ class Item:
         self.potencia = potencia
         self.qtd = qtd
 
-    def getQtd() -> int:
+    def getNome(self) -> str :
+        return self.nome
+
+    def getPotencia(self) -> int :
+        return self.potencia
+
+    def getQtd(self) -> int:
         return self.qtd
 
-    def diminuiQtd() -> None:
+    def diminuiQtd(self) -> None:
             self.qtd -= 1

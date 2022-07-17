@@ -1,3 +1,4 @@
+from ast import Str
 from tipo import Tipo
 from ataque import *
 
@@ -33,6 +34,9 @@ class Entidade:
         if (self.vivo):
             self.hp = qtd
             self.vivo = True
+
+    def getNome(self) -> Str :
+        return self.nome
 
     def getAtaques(self) -> list :
         return self.ataques
