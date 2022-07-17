@@ -114,7 +114,10 @@ class Batalha:
         pass
 
     def verificaVencedor(self) -> Jogador:
-        pass
+        if self.jogador1.vencedor == True:
+            return self.jogador1
+        elif self.jogador2.vencedor == True:
+            return self.jogador2
 
     def defineEscolha(escolha: str) -> None:
         pass

@@ -15,7 +15,7 @@ class Jogador:
         self.time.reserva.append(entidade)
 
     def defineOrdemEntidades(self) -> None:
-        pass
+        self.time.ordenaLista()
 
     def getTodosItens(self) -> list:
         return self.itens
@@ -24,10 +24,10 @@ class Jogador:
         return self.itens[index]
 
     def usarItem(self, itemIndex: int, local: int, entidadeIndex: int) -> None:
-        pass
-
+        self.time.usarItem(local, entidadeIndex, self.itens[itemIndex].tipoItem, self.itens[itemIndex].potencia)
+        
     def diminuiQtdItem(self, index: int) -> None:
-        pass
+        self.itens[index].diminuiQtd()
 
     def getTimeInteiro(self) -> list:
         return self.time.getTimeInteiro()
@@ -38,8 +38,8 @@ class Jogador:
     def getCampo(self) -> list:
         return self.time.getCampo()
 
-    def invocar(self, index: int, vazio: bool) -> None:
-        pass
+    def invocar(self, entidadeIndex1: int, entidadeIndex2: int, vazio: bool) -> None:
+        self.time.invocar(entidadeIndex1, entidadeIndex2, vazio)
 
     def diminuiTurnos(self, qtd: int) -> None:
         self.turnos -= qtd
@@ -48,7 +48,7 @@ class Jogador:
         return self.turnos
 
     def mudaEntidadeAtual(self) -> None:
-        pass
+        self.time.entidadeAtual = self.time.campo[self.time.campo.index(self.time.entidadeAtual)+1]
 
     def getAtaques(self) -> list:
         return self.ataques
@@ -60,17 +60,17 @@ class Jogador:
         return self.time.getTipoEntidade(local, entidadeIndex)
 
     def causarDano(self, modificador: float, danoBase: int, entidadeIndex: int) -> None:
-        pass
+        self.time.causarDano(modificador, danoBase, entidadeIndex)
 
     def ataqueAbsorvido(self, entidadeIndex: int, danoBase: int) -> None:
-        pass
+        self.time.ataqueAbsorvido(entidadeIndex, danoBase)
 
     def diminuirMp(self, entidadeIndex: int, qtd: int) -> None:
-        pass
+        self.time.diminuirMp(qtd, entidadeIndex)
 
-    def fusao(self, local1: int, entidadeIndex1: int,local1: int, entidadeIndex2: int, novoDemonio: Entidade, novoLocal: int, novoIndex: int) -> None:
-        pass
+    def fusao(self, local1: int, entidadeIndex1: int,local2: int, entidadeIndex2: int, novoDemonio: Entidade, novoLocal: int, novoIndex: int) -> None:
+        self.time.fusao(local1, entidadeIndex1, local2, entidadeIndex2, novoDemonio, novoLocal, novoIndex)
     
     def setVencedor(self, vencedor: bool) -> None:
-            pass
+            self.vencedor = vencedor
 
