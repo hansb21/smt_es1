@@ -23,7 +23,7 @@ class PlayerInterface:
         self.an_image = PhotoImage(file="images/battle_fill.png") #pyimage1
         self.logo = PhotoImage(file="images/smt_logo.png") #pyimage2
         self.board_view=[]
-        aLabel = Label(self.table_frame, bd = 0, image=self.an_image)
+        #aLabel = Label(self.table_frame, bd = 0, image=self.an_image)
 
         self.logo_label = Label(self.table_frame, bd = 0, image=self.logo)
         self.logo_label.grid(row=0, column=3)
@@ -35,7 +35,7 @@ class PlayerInterface:
                            command=self.fill_character)
         self.endb = Button(self.message_frame,
                             text="Sair",
-                            command=lambda:exit())
+                            command=lambda:self.main_window.destroy())
         self.startb.grid(row=3, column=6)
         self.endb.grid(row=4, column=6)
     def fill_character(self):

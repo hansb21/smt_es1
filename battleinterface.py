@@ -279,30 +279,9 @@ class BattleInterface:
             widget.place_forget()
 
     def setItemsTest(self):
-        item1 = Item("Curativo 1", "cura", 50, 10)
-        item2 = Item("Curativo 2", "cura", 100, 5)
-        item3 = Item("Grimorio 1", "mp", 50, 10)
-        item4 = Item("Grimorio 2", "mp", 100, 5)
-        item5 = Item("Desfibrilador 1", "revive", 1, 5)
-        item6 = Item("Desfibrilador 1", "revive", 100, 2)
-        items = [item1, item2, item3, item4, item5, item6]
-        self.setItems(items)
+        self.setItems(self.batalha.itens)
 
     def setAtaquesTest(self):
-        agi_s = Tipo("Fogo", None, None, None, None)
-        bufu_s = Tipo("Gelo", None, None, None, None)
-        garu_s = Tipo("Vento", None, None, None, None)
-        zio_s = Tipo("Raio", None, None, None, None)
-
-        agi = Ataque("Agi", agi_s, 40, 4)
-        inferno = Ataque("Inferno", agi_s, 200, 48)
-        bufu = Ataque("Bufu", bufu_s, 40, 4)
-        diamond_Dust = Ataque("Diamond Dust", bufu_s, 200, 48)
-        garu = Ataque("Garu", garu_s, 40, 4)
-        panta_Rhei = Ataque("Panta Rhei", garu_s, 200, 42)
-        zio = Ataque("Zio", zio_s, 40, 4)
-        thunger_Reign = Ataque("Thunder Reign", zio_s, 200, 48)
-        ataques = [agi, inferno, zio, diamond_Dust]
-        self.setAtaques(ataques)
+        self.setAtaques(self.batalha.ataques)
 
 battle_interface = BattleInterface()
