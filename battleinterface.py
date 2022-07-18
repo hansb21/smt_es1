@@ -4,6 +4,7 @@ from typing import TextIO
 from item import Item
 from ataque import Ataque
 from tipo import Tipo
+from batalha import Batalha
 
 class StorageButton:
     def __init__(self, parent, width, height, itemOuAtq):
@@ -17,15 +18,15 @@ class StorageButton:
         self.button = Button(self.parent, bg="grey99", command=lambda:self.returnCommand())
 
     def setStored(self, store):
-        print("eeeee")
+        #print("eeeee")
         self.stored = store
         tempNome = self.stored.getNome()
         if self.itemOuAtq == "item":
-            print("Chegou")
+            #print("Chegou")
             tempPotencia = str(self.stored.getPotencia())
-            print(tempPotencia)
+            #print(tempPotencia)
             tempQtd = str(self.stored.getQtd())
-            print(tempQtd)
+            #print(tempQtd)
             self.text = tempNome + ":\n" + tempPotencia + " potencia\n" + tempQtd + " unidades"
         else:
             tempDano = str(self.stored.getDano())
@@ -65,7 +66,7 @@ class DisplayCell:
         else:
             self.imagem.place(relheight=0.75, relwidth=1, relx=0, rely=0)
             self.text.place(relheight=0.25, relwidth=1, relx=0, rely=0.75)
-        print("placed")
+        #print("placed")
 
     def insertText(self, texto):
         self.text.configure(state="normal")
@@ -296,5 +297,3 @@ class BattleInterface:
         atq4 = Ataque("Choque", tipo4, 14, 80)
         ataques = [atq1, atq2, atq3, atq4]
         self.setAtaques(ataques)
-
-battle_interface = BattleInterface()

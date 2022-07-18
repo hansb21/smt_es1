@@ -1,6 +1,7 @@
 from entidade import Entidade
 from item import Item
 from team import Time
+from tipo import Tipo
 class Jogador:
     def __init__(self, time: Time, seuTurno: bool, vencedor: bool, jogando: bool, itens: list, turnos: int, ataques: list):
         self.time = time

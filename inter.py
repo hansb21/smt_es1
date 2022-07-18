@@ -40,13 +40,14 @@ class PlayerInterface:
         self.endb.grid(row=4, column=6)
     def fill_character(self):
         self.clear_frame()
-        p1 = Label(self.table_frame, text= "Player 1", width=15, font=("Arial", 25))
+        
+        p1 = Label(self.table_frame, text= "Player 1",  width=15, font=("Arial", 25))
         p2 = Label(self.table_frame, text= "Player 2", width=15, font=("Arial", 25))
         p1.grid(row = 0, column = 0)
         p2.grid(row = 0, column = 80)
         
-        humano1 = 'images\sprites\humanos\humano1.png'
-        p1b = Button(self.message_frame, text="PLAYER 1", image= humano1, font=("Arial",25), height=5, width=15)
+        self.humano1 = PhotoImage(file='images/sprites/humanos/humano1.png')
+        p1b = Button(self.message_frame, text="PLAYER 1", font=("Arial",25), height=68, width=26, image=self.humano1)
         p2b = Button(self.message_frame, text="PLAYER 2", bg="black",fg="white", font=("Arial",25), height=5, width=15)
         p1b.grid(row=1, column=0)
         p2b.grid(row=1, column=80)

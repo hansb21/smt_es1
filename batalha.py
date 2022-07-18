@@ -1,5 +1,6 @@
 from jogador import *
 from entidade import Entidade
+from battleinterface import BattleInterface
 
 class Batalha:
     def __init__(self, batalhaEmAndamento: bool, estagio: str, jogador1: Jogador, jogador2: Jogador, jogadorAtual: Jogador, jogadorOutro: Jogador, todosHumanos: list, demoniosEscolha: list, demonioFusao: list):
@@ -12,6 +13,8 @@ class Batalha:
         self.todosHumanos = todosHumanos
         self.demoniosEscolha = demoniosEscolha
         self.demonioFusao = demonioFusao
+
+        self.interface = BattleInterface()
 
     def iniciar(self) -> None:
         pass
@@ -64,7 +67,7 @@ class Batalha:
     def definirTrocaCampo(self, index: int, vazio: bool) -> int:
         pass
 
-    def calcularTurnos(self, caso: str, resAtaque: string) -> None:
+    def calcularTurnos(self, caso: str, resAtaque: str) -> None:
         pass
 
     def calculaCustoAtaque(self, resAtaque: str) -> int:
