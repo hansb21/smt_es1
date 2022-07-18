@@ -287,13 +287,20 @@ class BattleInterface:
         self.setItems(items)
 
     def setAtaquesTest(self):
-        tipo1 = Tipo("Fogo", None, None, None, None)
-        tipo2 = Tipo("Gelo", None, None, None, None)
-        tipo3 = Tipo("Vento", None, None, None, None)
-        tipo4 = Tipo("Raio", None, None, None, None)
-        atq1 = Ataque("Bola de fogo", tipo1, 10, 50)
-        atq2 = Ataque("Espinho de gelo", tipo2, 20, 60)
-        atq3 = Ataque("Tornado", tipo3, 30, 70)
-        atq4 = Ataque("Choque", tipo4, 14, 80)
-        ataques = [atq1, atq2, atq3, atq4]
+        agi_s = Tipo("Fogo", None, None, None, None)
+        bufu_s = Tipo("Gelo", None, None, None, None)
+        garu_s = Tipo("Vento", None, None, None, None)
+        zio_s = Tipo("Raio", None, None, None, None)
+
+        agi = Ataque("Agi", agi_s, 40, 4)
+        inferno = Ataque("Inferno", agi_s, 200, 48)
+        bufu = Ataque("Bufu", bufu_s, 40, 4)
+        diamond_Dust = Ataque("Diamond Dust", bufu_s, 200, 48)
+        garu = Ataque("Garu", garu_s, 40, 4)
+        panta_Rhei = Ataque("Panta Rhei", garu_s, 200, 42)
+        zio = Ataque("Zio", zio_s, 40, 4)
+        thunger_Reign = Ataque("Thunder Reign", zio_s, 200, 48)
+        ataques = [agi, inferno, zio, diamond_Dust]
         self.setAtaques(ataques)
+
+battle_interface = BattleInterface()
