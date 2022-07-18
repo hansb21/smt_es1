@@ -1,9 +1,11 @@
-from ast import Str
+#from ast import Str
 from tipo import Tipo
 from ataque import *
 
 class Entidade:
-    def __init__(self, nome : str, tipo: Tipo, ataques: list[Ataque], vivo: bool, hp: int, hpMax:int, mpMax: int, mp: int, forca: int, defesa: int, sorte: int, ehHumano: bool, local: int ):
+    def __init__(self, nome : str, tipo: Tipo, ataques: list[Ataque], vivo: bool,
+                 hp: int, hpMax:int, mpMax: int, mp: int, forca: int, defesa: int, 
+                 sorte: int, ehHumano: bool, local: int, imagem):
         self.nome = nome
         self.tipo = tipo
         self.ataques = ataques
@@ -17,6 +19,7 @@ class Entidade:
         self.sorte = sorte
         self.ehHumano = ehHumano
         self.local = local
+        self.imagem = imagem
 
     def modificarVida(self, qtd: int) -> None:
         if (self.vivo):
@@ -35,7 +38,7 @@ class Entidade:
             self.hp = qtd
             self.vivo = True
 
-    def getNome(self) -> Str :
+    def getNome(self) -> str :
         return self.nome
 
     def getAtaques(self) -> list :

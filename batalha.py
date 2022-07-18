@@ -1,20 +1,15 @@
 from jogador import *
 from entidade import Entidade
-from battleinterface import BattleInterface
 
 class Batalha:
-    def __init__(self, batalhaEmAndamento: bool, estagio: str, jogador1: Jogador, jogador2: Jogador, jogadorAtual: Jogador, jogadorOutro: Jogador, todosHumanos: list, demoniosEscolha: list, demonioFusao: list):
-        self.batalhaEmAndamento = batalhaEmAndamento
-        self.estagio = estagio
-        self.jogador1 = jogador1
-        self.jogador2 = jogador2
-        self.jogadorAtual = jogadorAtual
-        self.jogadorOutro = jogadorOutro
-        self.todosHumanos = todosHumanos
-        self.demoniosEscolha = demoniosEscolha
-        self.demonioFusao = demonioFusao
-
-        self.interface = BattleInterface()
+    def __init__(self):
+        self.batalhaEmAndamento = False
+        self.estagio = "Escolha1"
+        self.jogadorAtual = None
+        self.jogadorOutro = None
+        self.todosHumanos = []
+        self.demoniosEscolha = []
+        self.demonioFusao = []
 
     def iniciar(self) -> None:
         pass

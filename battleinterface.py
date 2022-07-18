@@ -89,6 +89,8 @@ class BattleInterface:
         self.main_window.geometry("1280x720")
         self.main_window.resizable(FALSE,FALSE)
 
+        self.batalha = Batalha()
+
         #Definindo elementos
         self.defineFrames()
         self.defineMainButtons()
@@ -115,7 +117,7 @@ class BattleInterface:
 
     #FRAMES
     def defineFrames(self):
-        self.menu_frame = Frame(self.main_window, bg="red", width=128, height=528)
+        self.menu_frame = Frame(self.main_window, bg="grey99", width=128, height=528)
         self.field_frame = Frame(self.main_window, bg="green", width=1152, height=528)
         self.entity_frame = Frame(self.main_window, bg="blue", width=1280, height=192)
 
