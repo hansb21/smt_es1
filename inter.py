@@ -45,7 +45,8 @@ class PlayerInterface:
         p1.grid(row = 0, column = 0)
         p2.grid(row = 0, column = 80)
         
-        p1b = Button(self.message_frame, text="PLAYER 1", bg="red", font=("Arial",25), height=5, width=15)
+        humano1 = 'images\sprites\humanos\humano1.png'
+        p1b = Button(self.message_frame, text="PLAYER 1", image= humano1, font=("Arial",25), height=5, width=15)
         p2b = Button(self.message_frame, text="PLAYER 2", bg="black",fg="white", font=("Arial",25), height=5, width=15)
         p1b.grid(row=1, column=0)
         p2b.grid(row=1, column=80)
