@@ -3,13 +3,13 @@ from tipo import Tipo
 from ataque import *
 
 class Entidade:
-    def __init__(self, nome : str, tipo: Tipo, ataques: list[Ataque], vivo: bool,
+    def __init__(self, nome : str, tipo: Tipo, ataques: list[Ataque],
                  hp: int, hpMax:int, mpMax: int, mp: int, forca: int, defesa: int, 
                  sorte: int, ehHumano: bool, local: int, imagem):
         self.nome = nome
         self.tipo = tipo
         self.ataques = ataques
-        self.vivo = vivo
+        self.vivo = True
         self.hp = hp
         self.hpMax = hpMax #já podemos pensar em algum valor fixo
         self.mpMax = mpMax
@@ -20,6 +20,9 @@ class Entidade:
         self.ehHumano = ehHumano
         self.local = local
         self.imagem = imagem
+
+    def getImagem(self):
+        return self.imagem
 
     def modificarVida(self, qtd: int) -> None:
         if (self.vivo):
@@ -52,4 +55,7 @@ class Entidade:
 
     def getHpAtual(self) -> int :
         return self.hp
+
+    def getMpAtual(self) -> int :
+        return self.mp
 

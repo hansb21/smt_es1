@@ -1,6 +1,7 @@
 from jogador import *
 from entidade import Entidade
 from ataque import Ataque
+from tkinter import PhotoImage
 
 class Batalha:
     def __init__(self):
@@ -15,6 +16,7 @@ class Batalha:
         self.defineTipos()
         self.defineAtaques()
         self.defineItens()
+        self.defineEntidadesTeste()
 
     def defineTipos(self):
         self.tipo_fogo = Tipo("Fogo", None, "Gelo", None, "Raio")
@@ -67,6 +69,27 @@ class Batalha:
         self.atq_fisico4 = Ataque("Espingarda", self.tipo_fisico, 100, 0)
 
         self.ataques = [self.atq_fogo1, self.atq_fogo2, self.atq_raio1, self.atq_gelo2]
+
+    #SO PARA TESTE
+    def defineEntidadesTeste(self):
+        self.img1 = PhotoImage(file='images/sprites/demonios/demo1.png')
+        self.img1 = self.img1.zoom(2)
+
+        self.img2 = PhotoImage(file='images/sprites/demonios/demo2.png')
+        self.img2 = self.img2.zoom(2)
+
+        self.img3 = PhotoImage(file='images/sprites/demonios/demo3.png')
+        self.img3 = self.img3.zoom(2)
+
+        self.img4 = PhotoImage(file='images/sprites/demonios/demo4.png')
+        self.img4 = self.img4.zoom(2)
+
+        self.e1 = Entidade("Inimigo Teste1", self.tipo_fogo, self.ataques, 123, 123, 200, 200, 50, 40, 20, False, 0, self.img1)
+        self.e2 = Entidade("Inimigo Teste2", self.tipo_gelo, self.ataques, 456, 456, 300, 200, 50, 40, 20, False, 0, self.img2)
+        self.e3 = Entidade("Inimigo Teste3", self.tipo_vento, self.ataques, 789, 789, 400, 200, 50, 40, 20, False, 0, self.img3)
+        self.e4 = Entidade("Inimigo Teste4", self.tipo_raio, self.ataques, 912, 912, 500, 200, 50, 40, 20, False, 0, self.img4)
+
+        self.eInimigosTeste = [self.e1, self.e2, self.e3, self.e4]
 
     def defineItens(self):
         #Cura

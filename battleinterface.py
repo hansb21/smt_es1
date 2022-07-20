@@ -56,24 +56,38 @@ class DisplayCell:
         self.entidade = None
 
         self.frame = LabelFrame(self.parent, bd=self.frameBorder, text=self.frameText)
-        self.imagem = Label(self.frame, text="Imagem")
+        self.imagemLabel = Label(self.frame, text="Imagem")
         self.text = Text(self.frame, state='disabled')
+        self.button = Button(self.frame, bg="grey99", text="Selecionar")
 
     def place(self,x,y):
         self.frame.place(x=x, y=y, height=self.height, width=self.width)
         if self.textOnly:
-            self.text.place(relheight=1, relwidth=1, relx=0, rely=0)
+            self.text.place(relheight=1, relwidth=0.5, relx=0, rely=0)
+            #self.button.place(relheight=1, relwidth=0.5, relx=0.5, rely=0)
         else:
-            self.imagem.place(relheight=0.75, relwidth=1, relx=0, rely=0)
-            self.text.place(relheight=0.25, relwidth=1, relx=0, rely=0.75)
-        #print("placed")
+            self.imagemLabel.place(relheight=0.75, relwidth=1, relx=0, rely=0)
+            self.text.place(relheight=0.125, relwidth=1, relx=0, rely=0.75)
+            #self.button.place(relheight=0.125, relwidth=1, relx=0, rely=0.875)
+
+    def startSelection(self):
+        if self.textOnly:
+            self.button.place(relheight=1, relwidth=0.5, relx=0.5, rely=0)
+        else:
+            self.button.place(relheight=0.125, relwidth=1, relx=0, rely=0.875)
+
+    def endSelection(self):
+        self.button.place_forget()
 
     def insertText(self, texto):
         self.text.configure(state="normal")
         self.text.insert("0.0", texto)
         self.text.configure(state="disabled")
 
-    def replaceTest(self, pos, texto):
+    #Pos no formato "x.0" onde x é a linha do texto
+    #Começa por "1.0"
+    #Não mudar o .0
+    def replaceText(self, pos, texto):
         self.text.configure(state="normal")
         end = pos + " lineend"
         self.text.replace(pos, end, texto)
@@ -81,6 +95,16 @@ class DisplayCell:
 
     def setEntidade(self, entidade):
         self.entidade = entidade
+
+        self.imagemLabel.configure(image=self.entidade.getImagem())
+
+        self.replaceText("1.0", self.entidade.getNome())
+
+        hpText = "HP = " + str(self.entidade.getHpAtual())
+        self.replaceText("2.0", hpText)
+
+        mpText = "MP = " + str(self.entidade.getMpAtual())
+        self.replaceText("3.0", mpText)
 
 class BattleInterface:
     def __init__(self):
@@ -111,6 +135,7 @@ class BattleInterface:
         #TESTE
         self.setItemsTest()
         self.setAtaquesTest()
+        self.setInimigosTest()
 
         #SEMPRE POR ULTIMO
         self.main_window.mainloop()
@@ -132,7 +157,7 @@ class BattleInterface:
         self.item_button = Button(self.menu_frame ,bg="grey99", text="Itens", command=lambda:self.replaceMainWithItem())
         self.fundir_button = Button(self.menu_frame ,bg="grey99", text="Fusão", command=lambda:self.debug_button("Ritual de fusão") )
         self.invocar_button = Button(self.menu_frame ,bg="grey99", text="Invocar", command=lambda:self.debug_button("Ritual de invocação"))
-        self.passar_button = Button(self.menu_frame ,bg="grey99", text="Passar Turno", command=lambda:self.replaceTest())
+        self.passar_button = Button(self.menu_frame ,bg="grey99", text="Passar Turno", command=lambda:self.replaceText())
 
         self.lista_botoes = [   self.ataque_button, 
                                 self.item_button, 
@@ -153,9 +178,18 @@ class BattleInterface:
         self.unplaceItemButtons()
         self.placeMainButtons()
 
+        #PROVISORIO
+        for i in range(4):
+            self.campoCells[i].endSelection()
+            self.reservaCells[i].endSelection()
+
     def replaceAtaqueWithMain(self):
         self.unplaceAtaqueButtons()
         self.placeMainButtons()
+
+        #PROVISORIO
+        for inimigo in self.enemyCells:
+            inimigo.endSelection()
 
     #ITEM BUTTONS
     def defineItemButtons(self):
@@ -179,6 +213,11 @@ class BattleInterface:
         self.unplaceMainButtons()
         self.placeItemButtons()
 
+        #PROVISORIO
+        for i in range(4):
+            self.campoCells[i].startSelection()
+            self.reservaCells[i].startSelection()
+
     #ATAQUE BUTTONS
     def defineAtaqueButtons(self):
         self.lista_ataque_botoes = []
@@ -200,6 +239,10 @@ class BattleInterface:
     def replaceMainWithAtaque(self):
         self.unplaceMainButtons()
         self.placeAtaqueButtons()
+
+        #PROVISORIO
+        for inimigo in self.enemyCells:
+            inimigo.startSelection()
 
     #TURNOS CELL
     def defineTurnosCell(self):
@@ -268,9 +311,6 @@ class BattleInterface:
             self.lista_ataque_botoes[i].setStored(ataques[i])
 
     #FUNCS TESTE EXCLUIR DPS
-    def replaceTest(self):
-        self.campoCells[0].replaceTest("2.0", "REPLACE")
-
     def debug_button(self, escolha):
         print(f"{escolha} realizado sucesso")
 
@@ -284,4 +324,7 @@ class BattleInterface:
     def setAtaquesTest(self):
         self.setAtaques(self.batalha.ataques)
 
-battle_interface = BattleInterface()
+    def setInimigosTest(self):
+        inimigos = self.batalha.eInimigosTeste
+        for i, entidade in enumerate(inimigos):
+            self.enemyCells[i].setEntidade(entidade)
