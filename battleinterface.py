@@ -297,11 +297,11 @@ class BattleInterface:
     #ENTIDADE ATUAL
     def formatEntityCells(self):
         for (campo, reserva, inimigo) in zip(self.campoCells, self.reservaCells, self.enemyCells):
-            campo.insertText("NOME\nHP=100\nMP=100")
-            reserva.insertText("NOME\nHP=100\nMP=100")
-            inimigo.insertText("NOME\nHP=100\nMP=100")
+            campo.insertText("VAZIO\n\n")
+            reserva.insertText("VAZIO\n\n")
+            inimigo.insertText("VAZIO\n\n")
 
-        self.atualCell.insertText("NOME\nHP=100\nMP=100")
+        self.atualCell.insertText("VAZIO\n\n")
         self.turnosCell.insertText("10")
 
     #MUDA TEXTO BOTOES
