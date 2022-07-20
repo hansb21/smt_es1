@@ -106,6 +106,9 @@ class DisplayCell:
         mpText = "MP = " + str(self.entidade.getMpAtual())
         self.replaceText("3.0", mpText)
 
+    def getEntidade(self):
+        return self.entidade
+
 class BattleInterface:
     def __init__(self):
         self.main_window = Tk()
@@ -133,9 +136,9 @@ class BattleInterface:
         self.formatEntityCells()
 
         #TESTE
-        self.setItemsTest()
+        #self.setItemsTest()
         self.setAtaquesTest()
-        self.setInimigosTest()
+        self.setJogadoresTest()
 
         #SEMPRE POR ULTIMO
         self.main_window.mainloop()
@@ -328,3 +331,26 @@ class BattleInterface:
         inimigos = self.batalha.eInimigosTeste
         for i, entidade in enumerate(inimigos):
             self.enemyCells[i].setEntidade(entidade)
+
+    def setJogadoresTest(self):
+        atual = self.batalha.j1
+        outro = self.batalha.j2
+
+        inimigos = outro.getCampo()
+        inimigos_humano = outro.getHumano()
+        self.enemyCells[0].setEntidade(inimigos_humano)
+        for i, entidade in enumerate(inimigos):
+            self.enemyCells[i+1].setEntidade(entidade)
+
+        campo = atual.getCampo()
+        reserva = atual.getReserva()
+        humano = atual.getHumano()
+        self.campoCells[0].setEntidade(humano)
+        for i, entidade in enumerate(campo):
+            self.campoCells[i+1].setEntidade(entidade)
+        for i, entidade in enumerate(reserva):
+            self.reservaCells[i].setEntidade(entidade)
+        self.atualCell.setEntidade(self.campoCells[0].getEntidade())
+
+        self.setItems(atual.getTodosItens())
+        self.setAtaques(self.atualCell.getEntidade().getAtaques())

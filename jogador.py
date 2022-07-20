@@ -3,14 +3,13 @@ from item import Item
 from team import Time
 from tipo import Tipo
 class Jogador:
-    def __init__(self, time: Time, seuTurno: bool, vencedor: bool, jogando: bool, itens: list, turnos: int, ataques: list):
+    def __init__(self, time: Time, seuTurno: bool, vencedor: bool, jogando: bool, itens: list, turnos: int):
         self.time = time
         self.seuTurno = seuTurno
         self.vencedor = vencedor
         self.jogando = jogando
         self.itens = itens
         self.turnos = turnos
-        self.ataques = ataques
 
     def incluirEntidade(self, entidade: Entidade) -> None:
         self.time.reserva.append(entidade)
@@ -38,6 +37,9 @@ class Jogador:
 
     def getCampo(self) -> list:
         return self.time.getCampo()
+
+    def getHumano(self) -> Entidade :
+        return self.time.getHumano()
 
     def invocar(self, entidadeIndex1: int, entidadeIndex2: int, vazio: bool) -> None:
         self.time.invocar(entidadeIndex1, entidadeIndex2, vazio)

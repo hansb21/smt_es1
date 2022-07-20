@@ -2,11 +2,11 @@ from entidade import Entidade
 from tipo import Tipo
 
 class Time:
-    def __init__(self, humano: Entidade, campo: list, reserva: list, entidadeAtual: int):
+    def __init__(self, humano: Entidade, campo: list, reserva: list):
         self.humano = humano
         self.campo = campo
         self.reserva = reserva
-        self.entidadeAtual = entidadeAtual
+        self.entidadeAtual = 0
 
     def ordenaLista(self) -> None:
         self.campo = sorted(self.campo, key=lambda x: x.velocidade)
@@ -71,6 +71,9 @@ class Time:
 
     def getCampo(self) -> list:
         return self.campo
+
+    def getHumano(self) -> Entidade:
+        return self.humano
 
     def getTipoEntidade(self, local: int, entidadeIndex: int) -> Tipo:
         if (local == 0):
