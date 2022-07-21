@@ -1,19 +1,20 @@
 from tkinter import *
 
 class DisplayCell:
-    def __init__(self, parent, width, height, frameBorder, frameText, textOnly):
+    def __init__(self, parent, width, height, frameBorder, frameText, textOnly, interface):
         self.parent = parent
         self.width = width
         self.height = height
         self.frameBorder = frameBorder
         self.frameText = frameText
         self.textOnly = textOnly
+        self.interface = interface
         self.entidade = None
 
         self.frame = LabelFrame(self.parent, bd=self.frameBorder, text=self.frameText)
         self.imagemLabel = Label(self.frame, text="Imagem")
         self.text = Text(self.frame, state='disabled')
-        self.button = Button(self.frame, bg="grey99", text="Selecionar")
+        self.button = Button(self.frame, bg="grey99", text="Selecionar", command=self.buttonCommand)
 
     def place(self,x,y):
         self.frame.place(x=x, y=y, height=self.height, width=self.width)
@@ -64,3 +65,6 @@ class DisplayCell:
 
     def getEntidade(self):
         return self.entidade
+
+    def buttonCommand(self):
+        self.interface.alvoAtaqueSelecionado(self)

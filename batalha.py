@@ -204,6 +204,14 @@ class Batalha:
             self.jogadorAtual = self.j2
             self.jogadorOutro = self.j1
     
+    def executaAtaques(self, atacante, alvo, ataque):
+        res = self.avaliarAtaque(ataque.getTipo(), alvo.getTipo())
+        #print(res)
+        modificador = self.calcularModificadorDano(res)
+        self.causarDano(atacante, alvo, ataque, res, modificador)
+        atacante.modificarMagia(ataque.getCusto() * -1)
+        self.calcularTurnos("ataque", res)
+
     def iniciarBatalha(self) -> None:
         pass
 
@@ -250,13 +258,36 @@ class Batalha:
         pass
 
     def calcularTurnos(self, caso: str, resAtaque: str) -> None:
-        pass
+        custoAtaque = 0
+        if caso == "ataque":
+            custoAtaque = self.calculaCustoAtaque(resAtaque)
+        custoTurno = self.calculaCustoTurno(caso, custoAtaque)
+        self.jogadorAtual.diminuiTurnos(custoTurno)
+        #IMPLEMENTAR TROCA DE JOGADORES
 
     def calculaCustoAtaque(self, resAtaque: str) -> int:
-        pass
+        if resAtaque == "fraco":
+            return -1
+        elif resAtaque == "resiste":
+            return 1
+        elif resAtaque == "reflete":
+            return 2
+        elif resAtaque == "absorve":
+            return 3
+        else:
+            return 0
 
-    def calculoCustoTurno(self, caso: str, custoAtaque: int) -> int:
-        pass
+    def calculaCustoTurno(self, caso: str, custoAtaque: int) -> int:
+        if caso == "fusao":
+            return 4
+        elif caso == "item":
+            return 3
+        elif caso == "ataque":
+            return 2 + custoAtaque
+        elif caso == "invocar":
+            return 5
+        else:
+            return 1
 
     def mudaJogadorAtual(self) -> None:
         pass
@@ -264,17 +295,43 @@ class Batalha:
     def ataque(self) -> None:
         pass
 
-    def validarAtaque(self, ataqueIndex: int) -> None:
-        pass
+    def validarAtaque(self, ataque, atacante) -> None:
+        if atacante.getMpAtual() < ataque.getCusto():
+            return False
+        else:
+            return True
 
     def definirAlvo(self, index: int) -> None:
         pass
 
     def avaliarAtaque(self, tipoAtaque: Tipo, tipoAlvo: Tipo) -> str:
-        pass
+        if tipoAtaque.getNome() == tipoAlvo.getFraqueza():
+            return "fraco"
+        elif tipoAtaque.getNome() == tipoAlvo.getResistencia():
+            return "resiste"
+        elif tipoAtaque.getNome() == tipoAlvo.getRepelir():
+            return "reflete"
+        elif tipoAtaque.getNome() == tipoAlvo.getAbsorver():
+            return "absorve"
+        else:
+            return "normal"
 
-    def calcularModificadorDano(self, res: str) -> None:
-        pass
+    def calcularModificadorDano(self, res: str) -> float:
+        if res == "fraco":
+            return 1.5
+        elif res == "resiste":
+            return 0.5
+        else:
+            return 1
+
+    def causarDano(self, atacante, alvo, ataque, res, modificador):
+        danoTotal = modificador * ataque.getDano()
+        if res == "reflete":
+            atacante.modificarVida(danoTotal * -1)
+        elif res == "absorve":
+            alvo.modificarVida(danoTotal)
+        else:
+            alvo.modificarVida(danoTotal * -1)
 
     def fundir(self) -> None:
         pass

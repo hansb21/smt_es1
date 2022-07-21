@@ -17,7 +17,13 @@ class BattleInterface:
 
         self.batalha = Batalha()
 
-        #Definindo elementos
+        self.ataqueSelecionado = None
+        #self.alvoSelecionado = None
+
+        #Definindo objetos
+        self.defineJogadores()
+
+        #Definindo elementos GUI
         self.defineFrames()
         self.defineMainButtons()
         self.defineItemButtons()
@@ -42,6 +48,11 @@ class BattleInterface:
         #SEMPRE POR ULTIMO
         self.main_window.mainloop()
 
+    #Jogadores
+    def defineJogadores(self):
+        self.jogadorAtual = self.batalha.getJogadorAtual()
+        self.jogadorOutro = self.batalha.getJogadorOutro()
+
     #FRAMES
     def defineFrames(self):
         self.menu_frame = Frame(self.main_window, bg="grey99", width=128, height=528)
@@ -59,7 +70,7 @@ class BattleInterface:
         self.item_button = Button(self.menu_frame ,bg="grey99", text="Itens", command=lambda:self.replaceMainWithItem())
         self.fundir_button = Button(self.menu_frame ,bg="grey99", text="Fusão", command=lambda:self.debug_button("Ritual de fusão") )
         self.invocar_button = Button(self.menu_frame ,bg="grey99", text="Invocar", command=lambda:self.debug_button("Ritual de invocação"))
-        self.passar_button = Button(self.menu_frame ,bg="grey99", text="Passar Turno", command=lambda:self.replaceText())
+        self.passar_button = Button(self.menu_frame ,bg="grey99", text="Passar Turno", command=lambda:self.passarTurno())
 
         self.lista_botoes = [   self.ataque_button, 
                                 self.item_button, 
@@ -138,7 +149,7 @@ class BattleInterface:
 
     #TURNOS CELL
     def defineTurnosCell(self):
-        self.turnosCell = DisplayCell(self.menu_frame, 128, 75, 5, "Turnos", True)
+        self.turnosCell = DisplayCell(self.menu_frame, 128, 75, 5, "Turnos", True, self)
 
     def placeTurnosCell(self):
         self.turnosCell.place(0,0)
@@ -148,16 +159,16 @@ class BattleInterface:
         self.campoCells = []
         for i in range(4):
             texto = "Campo {}".format(i)
-            newCell = DisplayCell(self.entity_frame, 320, 96, 5, texto, True)
+            newCell = DisplayCell(self.entity_frame, 320, 96, 5, texto, True, self)
             self.campoCells.append(newCell)
 
         self.reservaCells = []
         for i in range(4):
             texto = "Reserva {}".format(i)
-            newCell = DisplayCell(self.entity_frame, 320, 96, 5, texto, True)
+            newCell = DisplayCell(self.entity_frame, 320, 96, 5, texto, True, self)
             self.reservaCells.append(newCell)
 
-            self.atualCell = DisplayCell(self.field_frame, 230, 528, 5, "Entidade Atual", False)
+            self.atualCell = DisplayCell(self.field_frame, 230, 528, 5, "Entidade Atual", False, self)
 
     def placePlayerCells(self):
         for i, cell in enumerate(self.campoCells):
@@ -175,7 +186,7 @@ class BattleInterface:
         self.enemyCells = []
         for i in range(4):
             texto = "Inimigo {}".format(i)
-            newCell = DisplayCell(self.field_frame, 230, 528, 5, texto, False)
+            newCell = DisplayCell(self.field_frame, 230, 528, 5, texto, False, self)
             self.enemyCells.append(newCell)
 
     def placeEnemyCells(self):
@@ -183,7 +194,7 @@ class BattleInterface:
             calc_pos=230*i+230
             cell.place(calc_pos, 0)
 
-    #ENTIDADE ATUAL
+    #INICIALIZAR CELULAS
     def formatEntityCells(self):
         for (campo, reserva, inimigo) in zip(self.campoCells, self.reservaCells, self.enemyCells):
             campo.insertText("VAZIO\n\n")
@@ -191,7 +202,12 @@ class BattleInterface:
             inimigo.insertText("VAZIO\n\n")
 
         self.atualCell.insertText("VAZIO\n\n")
-        self.turnosCell.insertText("10")
+
+        turnos = str(self.jogadorAtual.getTurnos())
+        self.turnosCell.insertText(turnos)
+
+    def updateTurnos(self):
+        self.turnosCell.replaceText("1.0", str(self.jogadorAtual.getTurnos()))
 
     #MUDA TEXTO BOTOES
     def setItems(self, items):
@@ -222,18 +238,15 @@ class BattleInterface:
             self.enemyCells[i].setEntidade(entidade)
 
     def setJogadoresTest(self):
-        atual = self.batalha.getJogadorAtual()
-        outro = self.batalha.getJogadorOutro()
-
-        inimigos = outro.getCampo()
-        inimigos_humano = outro.getHumano()
+        inimigos = self.jogadorOutro.getCampo()
+        inimigos_humano = self.jogadorOutro.getHumano()
         self.enemyCells[0].setEntidade(inimigos_humano)
         for i, entidade in enumerate(inimigos):
             self.enemyCells[i+1].setEntidade(entidade)
 
-        campo = atual.getCampo()
-        reserva = atual.getReserva()
-        humano = atual.getHumano()
+        campo = self.jogadorAtual.getCampo()
+        reserva = self.jogadorAtual.getReserva()
+        humano = self.jogadorAtual.getHumano()
         self.campoCells[0].setEntidade(humano)
         for i, entidade in enumerate(campo):
             self.campoCells[i+1].setEntidade(entidade)
@@ -241,10 +254,10 @@ class BattleInterface:
             self.reservaCells[i].setEntidade(entidade)
         self.atualCell.setEntidade(self.campoCells[0].getEntidade())
 
-        self.setItems(atual.getTodosItens())
+        self.setItems(self.jogadorAtual.getTodosItens())
         self.setAtaques(self.atualCell.getEntidade().getAtaques())
 
-        #CASO DE USO ATAQUE
+    #CASO DE USO ATAQUE
     def replaceMainWithAtaque(self):
         self.unplaceMainButtons()
         self.placeAtaqueButtons()
@@ -258,12 +271,15 @@ class BattleInterface:
         self.cancelaAtaqueSelectButton.place_forget()
         for inimigo in self.enemyCells:
             inimigo.endSelection()
+        self.ataqueSelecionado = None
         self.placeMainButtons()
 
     def replaceAtaqueWithAtaqueSelect(self, atq):
-        print("foi")
+        
+        if not self.batalha.validarAtaque(atq, self.atualCell.getEntidade()):
+            return
+
         self.unplaceAtaqueButtons()
-        #self.
         #Place Atq Label
         tempNome = atq.getNome()
         tempDano = str(atq.getDano())
@@ -274,7 +290,22 @@ class BattleInterface:
         self.atqSelectLabel.place(x=0, y=75, width=128, height=75)
         self.cancelaAtaqueSelectButton.place(x=0, y=150, width=128, height=55)
         for inimigo in self.enemyCells:
-            inimigo.startSelection()
+            if inimigo.getEntidade() != None:
+                inimigo.startSelection()
+        self.ataqueSelecionado = atq
+
+    def alvoAtaqueSelecionado(self, alvo):
+        alvoEntidade = alvo.getEntidade()
+        self.batalha.executaAtaques(self.atualCell.getEntidade(), alvoEntidade, self.ataqueSelecionado)
+        self.atualCell.updateStats()
+        alvo.updateStats()
+        self.updateTurnos()
+        self.replaceAtaqueSelectWithMain()
+
+    #CASO DE USO PASSAR TURNO
+    def passarTurno(self):
+        self.batalha.calcularTurnos("passar", "")
+        self.updateTurnos()
 
     def selecionaItem(self):
         pass

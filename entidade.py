@@ -26,15 +26,23 @@ class Entidade:
 
     def modificarVida(self, qtd: int) -> None:
         if (self.vivo):
-            self.hp += qtd
-            if (self.hp > self.hpMax):
-                self.hp = self.hpMax
+            if qtd > 0:
+                self.hp += qtd
+                if (self.hp > self.hpMax):
+                    self.hp = self.hpMax
+            else:
+                self.hp += round(qtd/self.defesa)
+                if self.hp <= 0:
+                    self.vivo = False
+                    self.hp = 0
 
     def modificarMagia(self, qtd: int) -> None:
         if (self.vivo):
             self.mp += qtd
             if (self.mp > self.mpMax):
                 self.mp = self.mpMax
+            elif self.mp < 0:
+                self.mp = 0
 
     def reviver(self, qtd: int) -> None:
         if (self.vivo):
@@ -47,7 +55,7 @@ class Entidade:
     def getAtaques(self) -> list :
         return self.ataques
 
-    def getTipoEntidade(self) -> Tipo :
+    def getTipo(self) -> Tipo :
         return self.tipo
 
     def getEhHumano(self) -> bool :
