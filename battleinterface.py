@@ -5,109 +5,8 @@ from item import Item
 from ataque import Ataque
 from tipo import Tipo
 from batalha import Batalha
-
-class StorageButton:
-    def __init__(self, parent, width, height, itemOuAtq):
-        self.parent = parent
-        self.width = width
-        self.height = height
-        self.itemOuAtq = itemOuAtq #String, com valor item ou ent
-
-        self.stored = None
-        self.text = ""
-        self.button = Button(self.parent, bg="grey99", command=lambda:self.returnCommand())
-
-    def setStored(self, store):
-        #print("eeeee")
-        self.stored = store
-        tempNome = self.stored.getNome()
-        if self.itemOuAtq == "item":
-            #print("Chegou")
-            tempPotencia = str(self.stored.getPotencia())
-            #print(tempPotencia)
-            tempQtd = str(self.stored.getQtd())
-            #print(tempQtd)
-            self.text = tempNome + ":\n" + tempPotencia + " potencia\n" + tempQtd + " unidades"
-        else:
-            tempDano = str(self.stored.getDano())
-            tempTipo = self.stored.getTipo().getNome()
-            tempCusto = str(self.stored.getCusto())
-            self.text = tempNome + ":\n" + tempDano + " dano\n" + tempTipo + "\n" + tempCusto + " MP"
-        self.button.configure(text=self.text)
-
-    def returnCommand(self):
-        return self.stored
-
-    def place(self, x, y):
-        self.button.place(x=x, y=y, width=self.width, height=self.height)
-
-    def place_forget(self):
-        self.button.place_forget()
-
-
-class DisplayCell:
-    def __init__(self, parent, width, height, frameBorder, frameText, textOnly):
-        self.parent = parent
-        self.width = width
-        self.height = height
-        self.frameBorder = frameBorder
-        self.frameText = frameText
-        self.textOnly = textOnly
-        self.entidade = None
-
-        self.frame = LabelFrame(self.parent, bd=self.frameBorder, text=self.frameText)
-        self.imagemLabel = Label(self.frame, text="Imagem")
-        self.text = Text(self.frame, state='disabled')
-        self.button = Button(self.frame, bg="grey99", text="Selecionar")
-
-    def place(self,x,y):
-        self.frame.place(x=x, y=y, height=self.height, width=self.width)
-        if self.textOnly:
-            self.text.place(relheight=1, relwidth=0.5, relx=0, rely=0)
-            #self.button.place(relheight=1, relwidth=0.5, relx=0.5, rely=0)
-        else:
-            self.imagemLabel.place(relheight=0.75, relwidth=1, relx=0, rely=0)
-            self.text.place(relheight=0.125, relwidth=1, relx=0, rely=0.75)
-            #self.button.place(relheight=0.125, relwidth=1, relx=0, rely=0.875)
-
-    def startSelection(self):
-        if self.textOnly:
-            self.button.place(relheight=1, relwidth=0.5, relx=0.5, rely=0)
-        else:
-            self.button.place(relheight=0.125, relwidth=1, relx=0, rely=0.875)
-
-    def endSelection(self):
-        self.button.place_forget()
-
-    def insertText(self, texto):
-        self.text.configure(state="normal")
-        self.text.insert("0.0", texto)
-        self.text.configure(state="disabled")
-
-    #Pos no formato "x.0" onde x é a linha do texto
-    #Começa por "1.0"
-    #Não mudar o .0
-    def replaceText(self, pos, texto):
-        self.text.configure(state="normal")
-        end = pos + " lineend"
-        self.text.replace(pos, end, texto)
-        self.text.configure(state="disabled")
-
-    def setEntidade(self, entidade):
-        self.entidade = entidade
-
-        self.imagemLabel.configure(image=self.entidade.getImagem())
-
-        self.replaceText("1.0", self.entidade.getNome())
-
-        hpText = "HP = " + str(self.entidade.getHpAtual())
-        self.replaceText("2.0", hpText)
-
-        mpText = "MP = " + str(self.entidade.getMpAtual())
-        self.replaceText("3.0", mpText)
-
-    def getEntidade(self):
-        return self.entidade
+from storagebutton import StorageButton
+from displaycell import DisplayCell
 
 class BattleInterface:
     def __init__(self):
@@ -186,19 +85,11 @@ class BattleInterface:
             self.campoCells[i].endSelection()
             self.reservaCells[i].endSelection()
 
-    def replaceAtaqueWithMain(self):
-        self.unplaceAtaqueButtons()
-        self.placeMainButtons()
-
-        #PROVISORIO
-        for inimigo in self.enemyCells:
-            inimigo.endSelection()
-
     #ITEM BUTTONS
     def defineItemButtons(self):
         self.lista_item_botoes = []
         for _ in range(6):
-            self.lista_item_botoes.append(StorageButton(self.menu_frame, 128, 55, "item"))
+            self.lista_item_botoes.append(StorageButton(self.menu_frame, 128, 55, "item", self))
         self.cancelaItemButton = Button(self.menu_frame, bg = "grey99", text="Cancela", command=lambda:self.replaceItemWithMain())
 
     def placeItemButtons(self):
@@ -223,10 +114,16 @@ class BattleInterface:
 
     #ATAQUE BUTTONS
     def defineAtaqueButtons(self):
+        #Antes de selecionar ataque
         self.lista_ataque_botoes = []
         for _ in range(4):
-            self.lista_ataque_botoes.append(StorageButton(self.menu_frame, 128, 65, "atq"))
+            self.lista_ataque_botoes.append(StorageButton(self.menu_frame, 128, 65, "atq", self))
         self.cancelaAtaqueButton = Button(self.menu_frame, bg = "grey99", text="Cancela", command=lambda:self.replaceAtaqueWithMain())
+
+        #Depois de selecionar ataque
+        self.atqSelecionado = None
+        self.atqSelectLabel = Label(self.menu_frame, text = "")
+        self.cancelaAtaqueSelectButton = Button(self.menu_frame, bg = "grey99", text="Cancela", command=lambda:self.replaceAtaqueSelectWithMain())
 
     def placeAtaqueButtons(self):
         for i, botao in enumerate(self.lista_ataque_botoes):
@@ -238,14 +135,6 @@ class BattleInterface:
         for botao in self.lista_ataque_botoes:
             botao.place_forget()
         self.cancelaAtaqueButton.place_forget()
-
-    def replaceMainWithAtaque(self):
-        self.unplaceMainButtons()
-        self.placeAtaqueButtons()
-
-        #PROVISORIO
-        for inimigo in self.enemyCells:
-            inimigo.startSelection()
 
     #TURNOS CELL
     def defineTurnosCell(self):
@@ -333,8 +222,8 @@ class BattleInterface:
             self.enemyCells[i].setEntidade(entidade)
 
     def setJogadoresTest(self):
-        atual = self.batalha.j1
-        outro = self.batalha.j2
+        atual = self.batalha.getJogadorAtual()
+        outro = self.batalha.getJogadorOutro()
 
         inimigos = outro.getCampo()
         inimigos_humano = outro.getHumano()
@@ -354,3 +243,38 @@ class BattleInterface:
 
         self.setItems(atual.getTodosItens())
         self.setAtaques(self.atualCell.getEntidade().getAtaques())
+
+        #CASO DE USO ATAQUE
+    def replaceMainWithAtaque(self):
+        self.unplaceMainButtons()
+        self.placeAtaqueButtons()
+
+    def replaceAtaqueWithMain(self):
+        self.unplaceAtaqueButtons()
+        self.placeMainButtons()
+
+    def replaceAtaqueSelectWithMain(self):
+        self.atqSelectLabel.place_forget()
+        self.cancelaAtaqueSelectButton.place_forget()
+        for inimigo in self.enemyCells:
+            inimigo.endSelection()
+        self.placeMainButtons()
+
+    def replaceAtaqueWithAtaqueSelect(self, atq):
+        print("foi")
+        self.unplaceAtaqueButtons()
+        #self.
+        #Place Atq Label
+        tempNome = atq.getNome()
+        tempDano = str(atq.getDano())
+        tempTipo = atq.getTipo().getNome()
+        tempCusto = str(atq.getCusto())
+        labelText = "SELECIONADO: \n"  + tempNome + ":\n" + tempDano + " dano\n" + tempTipo + "\n" + tempCusto + " MP"
+        self.atqSelectLabel.configure(text=labelText)
+        self.atqSelectLabel.place(x=0, y=75, width=128, height=75)
+        self.cancelaAtaqueSelectButton.place(x=0, y=150, width=128, height=55)
+        for inimigo in self.enemyCells:
+            inimigo.startSelection()
+
+    def selecionaItem(self):
+        pass

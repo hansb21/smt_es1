@@ -2,6 +2,7 @@ from jogador import *
 from entidade import Entidade
 from ataque import Ataque
 from tkinter import PhotoImage
+from random import randint
 
 class Batalha:
     def __init__(self):
@@ -19,6 +20,7 @@ class Batalha:
         self.defineEntidades()
         self.defineTimes()
         self.jogadoresTeste()
+        self.sorteiaJogador()
 
     def defineTipos(self):
         self.tipo_fogo = Tipo("Fogo", None, "Gelo", None, "Raio")
@@ -194,7 +196,13 @@ class Batalha:
         pass
 
     def sorteiaJogador(self) -> None:
-        pass
+        res = randint(1,2)
+        if res == 1:
+            self.jogadorAtual = self.j1
+            self.jogadorOutro = self.j2
+        else:
+            self.jogadorAtual = self.j2
+            self.jogadorOutro = self.j1
     
     def iniciarBatalha(self) -> None:
         pass
@@ -302,3 +310,8 @@ class Batalha:
     def executaEscolha(escolha: str) -> None:
         pass
 
+    def getJogadorAtual(self):
+        return self.jogadorAtual
+
+    def getJogadorOutro(self):
+        return self.jogadorOutro
