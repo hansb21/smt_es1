@@ -32,7 +32,7 @@ class Entidade:
                 if (self.hp > self.hpMax):
                     self.hp = self.hpMax
             else:
-                self.hp += round(qtd/self.defesa)
+                self.hp += round(qtd - self.defesa)
                 if self.hp <= 0:
                     self.vivo = False
                     self.hp = 0
@@ -81,4 +81,7 @@ class Entidade:
 
     def getEhHumano(self) -> bool :
         return self.ehHumano
+
+    def getVivo(self) -> bool :
+        return self.vivo
 

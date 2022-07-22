@@ -287,7 +287,7 @@ class BattleInterface:
         self.selectionLabel.place(x=0, y=75, width=128, height=75)
         self.cancelaAtaqueSelectButton.place(x=0, y=150, width=128, height=55)
         for inimigo in self.enemyCells:
-            if inimigo.getEntidade() != None:
+            if inimigo.getEntidade() != None and inimigo.getVivo():
                 inimigo.startSelection()
         self.ataqueSelecionado = atq
         self.tipoSelecao = "ataque"
@@ -303,7 +303,7 @@ class BattleInterface:
 
     def alvoSelecionadoAtaque(self, alvo):
         alvoEntidade = alvo.getEntidade()
-        self.batalha.executaAtaques(self.atualCell.getEntidade(), alvoEntidade, self.ataqueSelecionado)
+        self.batalha.executaAtaques(self.atualCell.getEntidade(), alvoEntidade, self.ataqueSelecionado, self.campoCells, self.atualCell)
         self.atualCell.updateStats()
         alvo.updateStats()
         self.updateTurnos()
@@ -357,7 +357,7 @@ class BattleInterface:
 
     def alvoSelecionadoItem(self, alvo):
         alvoEntidade = alvo.getEntidade()
-        self.batalha.usarItem(self.itemSelecionado, alvoEntidade)
+        self.batalha.usarItem(self.itemSelecionado, alvoEntidade, self.campoCells, self.atualCell)
         alvo.updateStats()
         self.atualCell.updateStats()
         self.updateTurnos()
@@ -413,7 +413,7 @@ class BattleInterface:
         self.confirmaInvocarButton.place(x=0, y=280, width=128, height=55)
         
     def confirmaInvocar(self):
-        self.batalha.invocar(self.reservaSelecionado, self.campoSelecionado)
+        self.batalha.invocar(self.reservaSelecionado, self.campoSelecionado, self.campoCells, self.atualCell)
         self.reservaSelecionado.updateStats()
         self.campoSelecionado.updateStats()
         self.reservaSelecionado = None
@@ -475,5 +475,7 @@ class BattleInterface:
 
     #CASO DE USO PASSAR TURNO
     def passarTurno(self):
-        self.batalha.calcularTurnos("passar", "")
+        self.batalha.calcularTurnos("passar", "", self.campoCells, self.atualCell)
         self.updateTurnos()
+
+    #Mudar entidade

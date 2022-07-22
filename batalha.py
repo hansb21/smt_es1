@@ -13,6 +13,7 @@ class Batalha:
         self.todosHumanos = []
         self.demoniosEscolha = []
         self.demonioFusao = []
+        self.atualIndex = 0
 
         self.defineTipos()
         self.defineAtaques()
@@ -204,13 +205,13 @@ class Batalha:
             self.jogadorAtual = self.j2
             self.jogadorOutro = self.j1
     
-    def executaAtaques(self, atacante, alvo, ataque):
+    def executaAtaques(self, atacante, alvo, ataque, listaCampoCells, atualCell):
         res = self.avaliarAtaque(ataque.getTipo(), alvo.getTipo())
         #print(res)
         modificador = self.calcularModificadorDano(res)
         self.causarDano(atacante, alvo, ataque, res, modificador)
         atacante.modificarMagia(ataque.getCusto() * -1)
-        self.calcularTurnos("ataque", res)
+        self.calcularTurnos("ataque", res, listaCampoCells, atualCell)
 
     def usarItem(self, item, alvo) -> None:
         tipo = item.getTipo()
@@ -257,7 +258,7 @@ class Batalha:
     def selecionarAlvoitem(itemIndex: int, local: int, entidadeIndex: int) -> list:
         pass
 
-    def invocar(self, cell1, cell2) -> None:
+    def invocar(self, cell1, cell2, listaCampoCells, atualCell) -> None:
         tempEnt = cell1.getEntidade()
         cell1.setEntidade(cell2.getEntidade())
         cell2.setEntidade(tempEnt)
@@ -265,7 +266,7 @@ class Batalha:
         cell2.changeLocal()
         print(str(cell1.getLocal()))
         print(str(cell2.getLocal()))
-        self.calcularTurnos("invocar", "")
+        self.calcularTurnos("invocar", "", listaCampoCells, atualCell)
 
     def definirTrocaReserva(self, index: int) -> int:
         pass
@@ -273,12 +274,13 @@ class Batalha:
     def definirTrocaCampo(self, index: int, vazio: bool) -> int:
         pass
 
-    def calcularTurnos(self, caso: str, resAtaque: str) -> None:
+    def calcularTurnos(self, caso: str, resAtaque: str, listaCampoCells: list, atualCell) -> None:
         custoAtaque = 0
         if caso == "ataque":
             custoAtaque = self.calculaCustoAtaque(resAtaque)
         custoTurno = self.calculaCustoTurno(caso, custoAtaque)
         self.jogadorAtual.diminuiTurnos(custoTurno)
+        self.mudaEntidadeAtual(listaCampoCells, atualCell)
         #IMPLEMENTAR TROCA DE JOGADORES
 
     def calculaCustoAtaque(self, resAtaque: str) -> int:
@@ -304,6 +306,39 @@ class Batalha:
             return 5
         else:
             return 1
+
+    def mudaEntidadeAtual(self, listaCampoCells, atualCell):
+        achouNovo = False
+        #Checa se na frente
+        for i in range(4):
+            if achouNovo:
+                print("saiu")
+                break
+            elif (not listaCampoCells[i].getVazio()) and i > self.atualIndex:
+                self.atualIndex = i
+                atualCell.setEntidade(listaCampoCells[i].getEntidade())
+                atualCell.updateStats()
+                achouNovo = True
+                print("achou")
+            else:
+                print("n achou")
+        
+        if achouNovo:
+            return
+        else:
+            #Checa se a tras
+            for i in range(4):
+                if achouNovo:
+                    print("saiu")
+                    break
+                elif (not listaCampoCells[i].getVazio()) and i < self.atualIndex:
+                    self.atualIndex = i
+                    atualCell.setEntidade(listaCampoCells[i].getEntidade())
+                    atualCell.updateStats()
+                    achouNovo = True
+                    print("achou")
+                else:
+                    print("n achou")
 
     def mudaJogadorAtual(self) -> None:
         pass

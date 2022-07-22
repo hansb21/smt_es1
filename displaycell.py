@@ -105,5 +105,10 @@ class DisplayCell:
         else:
             return False
 
+    def getVivo(self):
+        if self.entidade == None:
+            return False
+        return self.entidade.getVivo()
+
     def buttonCommand(self):
         self.interface.alvoSelecionado(self)
