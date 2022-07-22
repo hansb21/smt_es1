@@ -21,6 +21,9 @@ class Entidade:
         self.ehHumano = ehHumano
         self.local = local
         self.imagem = imagem
+    
+    def name(self):
+        return self.nome
 
     def getImagem(self):
         return self.imagem
