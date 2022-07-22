@@ -259,9 +259,12 @@ class Batalha:
 
     def invocar(self, cell1, cell2) -> None:
         tempEnt = cell1.getEntidade()
-        cell1.clearEntidade()
         cell1.setEntidade(cell2.getEntidade())
         cell2.setEntidade(tempEnt)
+        cell1.changeLocal()
+        cell2.changeLocal()
+        print(str(cell1.getLocal()))
+        print(str(cell2.getLocal()))
         self.calcularTurnos("invocar", "")
 
     def definirTrocaReserva(self, index: int) -> int:

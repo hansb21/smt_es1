@@ -1,4 +1,5 @@
 #from ast import Str
+from inspect import _void
 from tipo import Tipo
 from ataque import *
 
@@ -71,4 +72,13 @@ class Entidade:
 
     def getMpAtual(self) -> int :
         return self.mp
+
+    def getLocal(self) -> int :
+        return self.local
+
+    def setLocal(self, novo) -> None :
+        self.local = novo
+
+    def getEhHumano(self) -> bool :
+        return self.ehHumano
 
