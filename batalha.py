@@ -154,8 +154,8 @@ class Batalha:
         self.img_h4 = PhotoImage(file='images/sprites/humanos/humano4.png')
         self.img_h4 = self.img_h4.zoom(2)
 
-        self.h1 = Entidade("Humano Teste 1", self.tipo_fisico, self.ataques, 500, 500, 100, 100, 10, 20, 30, True, 0, self.img_h1)
-        self.h2 = Entidade("Humano Teste 2", self.tipo_fisico, self.ataques, 500, 500, 100, 100, 10, 20, 30, True, 0, self.img_h2)
+        self.h1 = Entidade("Humano Teste 1", self.tipo_fisico, self.ataques, 400, 500, 100, 100, 10, 20, 30, True, 0, self.img_h1)
+        self.h2 = Entidade("Humano Teste 2", self.tipo_fisico, self.ataques, 400, 500, 100, 100, 10, 20, 30, True, 0, self.img_h2)
         self.h3 = Entidade("Humano Teste 3", self.tipo_fisico, self.ataques, 500, 500, 100, 100, 10, 20, 30, True, 0, self.img_h3)
         self.h4 = Entidade("Humano Teste 4", self.tipo_fisico, self.ataques, 500, 500, 100, 100, 10, 20, 30, True, 0, self.img_h4)
 
@@ -212,6 +212,18 @@ class Batalha:
         atacante.modificarMagia(ataque.getCusto() * -1)
         self.calcularTurnos("ataque", res)
 
+    def usarItem(self, item, alvo) -> None:
+        tipo = item.getTipo()
+        potencia = item.getPotencia()
+        if tipo == "cura":
+            alvo.modificarVida(potencia)
+        elif tipo == "magia":
+            alvo.modificarMagia(potencia)
+        elif tipo == "revive":
+            alvo.reviver(potencia)
+        item.diminuiQtd()
+        self.calcularTurnos("item", "")
+
     def iniciarBatalha(self) -> None:
         pass
 
@@ -239,17 +251,18 @@ class Batalha:
     def incluirDemonio2(self, escolha: Entidade) -> None:
         pass
 
-    def usarItem(self) -> None:
-        pass
-
     def escolherItem(self) -> int:
         pass
 
     def selecionarAlvoitem(itemIndex: int, local: int, entidadeIndex: int) -> list:
         pass
 
-    def invocar(self) -> None:
-        pass
+    def invocar(self, cell1, cell2) -> None:
+        tempEnt = cell1.getEntidade()
+        cell1.clearEntidade()
+        cell1.setEntidade(cell2.getEntidade())
+        cell2.setEntidade(tempEnt)
+        self.calcularTurnos("invocar", "")
 
     def definirTrocaReserva(self, index: int) -> int:
         pass

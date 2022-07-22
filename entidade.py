@@ -45,8 +45,10 @@ class Entidade:
                 self.mp = 0
 
     def reviver(self, qtd: int) -> None:
-        if (self.vivo):
+        if not (self.vivo):
             self.hp = qtd
+            if self.hp > self.hpMax:
+                self.hp = self.hpMax
             self.vivo = True
 
     def getNome(self) -> str :
@@ -63,6 +65,9 @@ class Entidade:
 
     def getHpAtual(self) -> int :
         return self.hp
+
+    def getHpMax(self) -> int :
+        return self.hpMax
 
     def getMpAtual(self) -> int :
         return self.mp

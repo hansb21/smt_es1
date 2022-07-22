@@ -13,15 +13,11 @@ class StorageButton:
         self.button = Button(self.parent, bg="grey99", command=self.buttonCommand)
 
     def setStored(self, store):
-        #print("eeeee")
         self.stored = store
         tempNome = self.stored.getNome()
         if self.itemOuAtq == "item":
-            #print("Chegou")
             tempPotencia = str(self.stored.getPotencia())
-            #print(tempPotencia)
             tempQtd = str(self.stored.getQtd())
-            #print(tempQtd)
             self.text = tempNome + ":\n" + tempPotencia + " potencia\n" + tempQtd + " unidades"
         else:
             tempDano = str(self.stored.getDano())
@@ -30,9 +26,14 @@ class StorageButton:
             self.text = tempNome + ":\n" + tempDano + " dano\n" + tempTipo + "\n" + tempCusto + " MP"
         self.button.configure(text=self.text)
 
+    def updateText(self):
+        self.setStored(self.stored)
+
     def buttonCommand(self):
         if self.itemOuAtq == "atq":
             self.interface.replaceAtaqueWithAtaqueSelect(self.stored)
+        else:
+            self.interface.replaceItemWithItemSelect(self.stored)
 
     def place(self, x, y):
         self.button.place(x=x, y=y, width=self.width, height=self.height)

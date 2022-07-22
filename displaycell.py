@@ -51,13 +51,22 @@ class DisplayCell:
 
     def setEntidade(self, entidade):
         self.entidade = entidade
-        self.imagemLabel.configure(image=self.entidade.getImagem())
+        if self.entidade == None:
+            self.imagemLabel.configure(image=None)
+        else:
+            self.imagemLabel.configure(image=self.entidade.getImagem())
         self.updateStats()
 
     def updateStats(self):
+        if self.entidade == None:
+            self.replaceText("1.0", "VAZIO")
+            self.replaceText("2.0", "")
+            self.replaceText("3.0", "")
+            return
+
         self.replaceText("1.0", self.entidade.getNome())
 
-        hpText = "HP = " + str(self.entidade.getHpAtual())
+        hpText = "HP = " + str(self.entidade.getHpAtual()) + " / " + str(self.entidade.getHpMax())
         self.replaceText("2.0", hpText)
 
         mpText = "MP = " + str(self.entidade.getMpAtual())
@@ -66,5 +75,13 @@ class DisplayCell:
     def getEntidade(self):
         return self.entidade
 
+    def clearEntidade(self):
+        self.entidade = None
+
+    def getEntidadeNome(self):
+        if self.entidade == None:
+            return "VAZIO"
+        return self.entidade.getNome()
+
     def buttonCommand(self):
-        self.interface.alvoAtaqueSelecionado(self)
+        self.interface.alvoSelecionado(self)

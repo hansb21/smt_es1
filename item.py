@@ -17,5 +17,8 @@ class Item:
     def getQtd(self) -> int:
         return self.qtd
 
+    def getTipo(self) -> str:
+        return self.tipoItem
+
     def diminuiQtd(self) -> None:
             self.qtd -= 1
