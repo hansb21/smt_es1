@@ -28,9 +28,14 @@ class Time:
         else:
             self.incluirNovo(tempReserva, 0, entidadeIndex2)
 
-    def getTimeInterior(self) -> list:
-        self.campo.append(self.reserva)
-        return self.campo
+    def getTimeInteiro(self) -> list:
+        inteiro = []
+        for i in self.campo:
+            inteiro.append(i)
+        for i in self.reserva:
+            inteiro.append(i)
+        inteiro.append(self.humano)
+        return inteiro
 
     def usarItem(self, local: int, entidadeIndex: int, tipo: str, itemPower:int) -> None:
 

@@ -1,3 +1,4 @@
+from socket import timeout
 from jogador import *
 from entidade import Entidade
 from ataque import Ataque
@@ -225,17 +226,13 @@ class Batalha:
         self.fusoes = {}
 
         for i in self.todosDemonios:
-            #print(i)
             for j in self.todosDemonios:
-                #print(j)
                 if [i.getNome(), j.getNome()] not in self.fusoes.values() and [j.getNome(), i.getNome()] not in self.fusoes.values():
                     fusao = choice(self.todosDemonios)
                     if fusao in self.fusoes.keys():
                         self.fusoes[fusao].append([i.getNome(), j.getNome()])
                     else:
                         self.fusoes[fusao] = [[i.getNome(), j.getNome()]]
-        
-        print(self.fusoes.keys())
 
 
     def defineItens(self):
@@ -285,7 +282,6 @@ class Batalha:
     
     def executaAtaques(self, atacante, alvo, ataque, listaCampoCells, atualCell):
         res = self.avaliarAtaque(ataque.getTipo(), alvo.getTipo())
-        #print(res)
         modificador = self.calcularModificadorDano(res)
         self.causarDano(atacante, alvo, ataque, res, modificador)
         atacante.modificarMagia(ataque.getCusto() * -1)
@@ -342,8 +338,6 @@ class Batalha:
         cell2.setEntidade(tempEnt)
         cell1.changeLocal()
         cell2.changeLocal()
-        print(str(cell1.getLocal()))
-        print(str(cell2.getLocal()))
         self.calcularTurnos("invocar", "", listaCampoCells, atualCell)
 
     def definirTrocaReserva(self, index: int) -> int:
@@ -359,6 +353,7 @@ class Batalha:
         custoTurno = self.calculaCustoTurno(caso, custoAtaque)
         self.jogadorAtual.diminuiTurnos(custoTurno)
         self.interface.setAtaques(self.interface.atualCell.getEntidade().getAtaques())
+        self.verificaVencedor()
         if self.jogadorAtual.getTurnos() <= 0:
             self.jogadorAtual.setTurnos(10)
             self.mudaJogadorAtual()
@@ -395,16 +390,14 @@ class Batalha:
         #Checa se na frente
         for i in range(4):
             if achouNovo:
-                print("saiu")
                 break
             elif (not listaCampoCells[i].getVazio()) and i > self.atualIndex:
                 self.atualIndex = i
                 atualCell.setEntidade(listaCampoCells[i].getEntidade())
                 atualCell.updateStats()
                 achouNovo = True
-                print("achou")
             else:
-                print("n achou")
+                continue
         
         if achouNovo:
             return
@@ -412,16 +405,14 @@ class Batalha:
             #Checa se a tras
             for i in range(4):
                 if achouNovo:
-                    print("saiu")
                     break
                 elif (not listaCampoCells[i].getVazio()) and i < self.atualIndex:
                     self.atualIndex = i
                     atualCell.setEntidade(listaCampoCells[i].getEntidade())
                     atualCell.updateStats()
                     achouNovo = True
-                    print("achou")
                 else:
-                    print("n achou")
+                    continue
 
     def mudaJogadorAtual(self) -> None:
         temp = self.jogadorAtual
@@ -518,10 +509,35 @@ class Batalha:
         pass
 
     def verificaVencedor(self) -> Jogador:
-        if self.jogador1.vencedor == True:
-            return self.jogador1
-        elif self.jogador2.vencedor == True:
-            return self.jogador2
+        timeAtual = self.jogadorAtual.getTimeInteiro()
+        humanoMorto = False
+        demoniosMortos = 0
+
+        for i in timeAtual:
+            if i.getEhHumano() and not i.getVivo():
+                humanoMorto = True
+                break
+            elif not i.getEhHumano() and not i.getVivo():
+                demoniosMortos += 1
+
+        if humanoMorto or demoniosMortos == len(timeAtual) - 1:
+            print("Jogador Outro ganhou!")
+            return
+
+        humanoMorto = False
+        demoniosMortos = 0
+        timeOutro = self.jogadorOutro.getTimeInteiro()
+
+        for i in timeOutro:
+            if i.getEhHumano() and not i.getVivo():
+                humanoMorto = True
+                break
+            elif not i.getEhHumano() and not i.getVivo():
+                demoniosMortos += 1
+
+        if humanoMorto or demoniosMortos == len(timeOutro) - 1:
+            print("Jogador Atual ganhou!")
+            return
 
     def defineEscolha(escolha: str) -> None:
         pass
