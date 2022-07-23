@@ -1,4 +1,5 @@
 from tipo import Tipo
+from random import randint
 from item import Item
 from jogador import Jogador
 from random import choice
@@ -347,6 +348,8 @@ class Batalha:
             atacante.modificarVida(danoTotal * -1)
         elif res == "absorve":
             alvo.modificarVida(danoTotal)
+        elif (atacante.sorte + randint(0, 50) > 70:
+              alvo.modificarVida(danoTotal * -2)
         else:
             alvo.modificarVida(danoTotal * -1)
 
