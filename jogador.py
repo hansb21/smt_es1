@@ -47,6 +47,9 @@ class Jogador:
     def diminuiTurnos(self, qtd: int) -> None:
         self.turnos -= qtd
 
+    def setTurnos(self, qtd: int) -> None:
+        self.turnos = qtd
+
     def getTurnos(self) -> int:
         return self.turnos
 

@@ -52,7 +52,7 @@ class DisplayCell:
     def setEntidade(self, entidade):
         self.entidade = entidade
         if self.entidade == None:
-            self.imagemLabel.configure(image=None)
+            self.imagemLabel.configure(image="")
         else:
             self.imagemLabel.configure(image=self.entidade.getImagem())
         self.updateStats()
@@ -75,13 +75,40 @@ class DisplayCell:
     def getEntidade(self):
         return self.entidade
 
-    def clearEntidade(self):
-        self.entidade = None
-
     def getEntidadeNome(self):
         if self.entidade == None:
             return "VAZIO"
         return self.entidade.getNome()
+
+    def getLocal(self):
+        if self.entidade == None:
+            return "VAZIO"
+        else:
+            return self.entidade.getLocal()
+
+    def changeLocal(self):
+        if self.entidade == None:
+            return
+        if self.entidade.getLocal() == 0:
+            self.entidade.setLocal(1)
+        else:
+            self.entidade.setLocal(0)
+
+    def getEhHumano(self):
+        if self.entidade == None:
+            return False
+        return self.entidade.getEhHumano()
+
+    def getVazio(self):
+        if self.entidade == None:
+            return True
+        else:
+            return False
+
+    def getVivo(self):
+        if self.entidade == None:
+            return False
+        return self.entidade.getVivo()
 
     def buttonCommand(self):
         self.interface.alvoSelecionado(self)

@@ -10,7 +10,8 @@ from team import Time
 from random import randint
 
 class Batalha:
-    def __init__(self):
+    def __init__(self, interface):
+        self.interface = interface
         self.batalhaEmAndamento = False
         self.estagio = "Escolha1"
         self.jogadorAtual = None
@@ -18,11 +19,13 @@ class Batalha:
         self.todosHumanos = []
         self.demoniosEscolha = []
         self.demonioFusao = []
+        self.atualIndex = 0
 
         self.defineTipos()
         self.defineAtaques()
         self.defineItens()
         self.defineEntidades()
+        self.defineFusoes()
         self.defineTimes()
         self.jogadoresTeste()
         self.sorteiaJogador()
@@ -38,49 +41,48 @@ class Batalha:
 
     def defineAtaques(self):
         #Fogo
-        self.atq_fogo1 = Ataque("Agi", self.tipo_fogo, 130, 10)
-        self.atq_fogo2 = Ataque("Agilao", self.tipo_fogo, 160, 20)
-        self.atq_fogo3 = Ataque("Agidyne", self.tipo_fogo, 215, 35)
-        self.atq_fogo4 = Ataque("Agibarion", self.tipo_fogo, 265, 50)
+        self.agi= Ataque("Agi", self.tipo_fogo, 130, 10)
+        self.agilao = Ataque("Agilao", self.tipo_fogo, 160, 20)
+        self.agidyne = Ataque("Agidyne", self.tipo_fogo, 215, 35)
+        self.agibarion = Ataque("Agibarion", self.tipo_fogo, 265, 50)
 
         #Gelo
-        self.atq_gelo1 = Ataque("Bufu", self.tipo_gelo, 130, 10)
-        self.atq_gelo2 = Ataque("Bufula", self.tipo_gelo, 160, 20)
-        self.atq_gelo3 = Ataque("Bufudyne", self.tipo_gelo, 215, 35)
-        self.atq_gelo4 = Ataque("Bufubarion", self.tipo_gelo, 265, 50)
+        self.bufu = Ataque("Bufu", self.tipo_gelo, 130, 10)
+        self.bufula = Ataque("Bufula", self.tipo_gelo, 160, 20)
+        self.bufudyne = Ataque("Bufudyne", self.tipo_gelo, 215, 35)
+        self.bufubarion = Ataque("Bufubarion", self.tipo_gelo, 265, 50)
 
         #Vento
-        self.atq_vento1 = Ataque("Zan", self.tipo_vento, 130, 10)
-        self.atq_vento2 = Ataque("Zanma", self.tipo_vento, 160, 20)
-        self.atq_vento3 = Ataque("Zandyne", self.tipo_vento, 215, 35)
-        self.atq_vento4 = Ataque("Zanbaryon", self.tipo_vento, 265, 50)
+        self.zan = Ataque("Zan", self.tipo_vento, 130, 10)
+        self.zanma = Ataque("Zanma", self.tipo_vento, 160, 20)
+        self.zandyne = Ataque("Zandyne", self.tipo_vento, 215, 35)
+        self.zanbarion = Ataque("Zanbarion", self.tipo_vento, 265, 50)
 
         #Raio
-        self.atq_raio1 = Ataque("Zio", self.tipo_raio, 130, 10)
-        self.atq_raio2 = Ataque("Zionga", self.tipo_raio, 160, 20)
-        self.atq_raio3 = Ataque("Ziodyne", self.tipo_raio, 215, 35)
-        self.atq_raio4 = Ataque("Ziobarion", self.tipo_raio, 265, 50)
+        self.zio = Ataque("Zio", self.tipo_raio, 130, 10)
+        self.zionga = Ataque("Zionga", self.tipo_raio, 160, 20)
+        self.ziodyne = Ataque("Ziodyne", self.tipo_raio, 215, 35)
+        self.ziobarion = Ataque("Ziobarion", self.tipo_raio, 265, 50)
 
         #Luz
-        self.atq_luz1 = Ataque("Hama", self.tipo_luz, 140, 15)
-        self.atq_luz2 = Ataque("Hamaon", self.tipo_luz, 175, 25)
-        self.atq_luz3 = Ataque("Hamabarion", self.tipo_luz, 265, 55)
+        self.hama = Ataque("Hama", self.tipo_luz, 140, 15)
+        self.hamaon = Ataque("Hamaon", self.tipo_luz, 175, 25)
+        self.hamabarion = Ataque("Hamabarion", self.tipo_luz, 265, 55)
 
         #Escuro
-        self.atq_escuro1 = Ataque("Mudo", self.tipo_escuro, 140, 15)
-        self.atq_escuro2 = Ataque("Mudoon", self.tipo_escuro, 175, 25)
-        self.atq_escuro3 = Ataque("Mudobarion", self.tipo_escuro, 265, 5)
+        self.mudo = Ataque("Mudo", self.tipo_escuro, 140, 15)
+        self.mudoon = Ataque("Mudoon", self.tipo_escuro, 175, 25)
+        self.mudobarion = Ataque("Mudobarion", self.tipo_escuro, 265, 5)
 
         #Fisico (todos custam 0)
-        self.atq_fisico1 = Ataque("Soco", self.tipo_fisico, 70, 0)
-        self.atq_fisico2 = Ataque("Mordida", self.tipo_fisico, 80, 0)
-        self.atq_fisico3 = Ataque("Corte", self.tipo_fisico, 90, 0)
-        self.atq_fisico4 = Ataque("Espingarda", self.tipo_fisico, 100, 0)
+        self.soco = Ataque("Soco", self.tipo_fisico, 70, 0)
+        self.mordida = Ataque("Mordida", self.tipo_fisico, 80, 0)
+        self.corte = Ataque("Corte", self.tipo_fisico, 90, 0)
+        self.espingarda = Ataque("Espingarda", self.tipo_fisico, 100, 0)
 
-        self.ataques = [self.atq_fisico1, self.atq_fogo1, self.atq_raio1, self.atq_gelo1]
+        self.atqHumanos = [self.espingarda, self.agi, self.bufu, self.zio]
 
     def defineEntidades(self):
-        #Demonios
         self.img1 = PhotoImage(file='images/sprites/demonios/demo1.png')
         self.img1 = self.img1.zoom(2)
 
@@ -129,24 +131,83 @@ class Batalha:
         self.img16 = PhotoImage(file='images/sprites/demonios/demo16.png')
         self.img16 = self.img16.zoom(2)
 
-        self.e1 = Entidade("Demonio Teste 1", self.tipo_fogo, self.ataques, 123, 123, 200, 200, 50, 40, 20, False, 0, self.img1)
-        self.e2 = Entidade("Demonio Teste 2", self.tipo_gelo, self.ataques, 456, 456, 300, 200, 50, 40, 20, False, 0, self.img2)
-        self.e3 = Entidade("Demonio Teste 3", self.tipo_vento, self.ataques, 789, 789, 400, 200, 50, 40, 20, False, 0, self.img3)
-        self.e4 = Entidade("Demonio Teste 4", self.tipo_raio, self.ataques, 912, 912, 500, 200, 50, 40, 20, False, 0, self.img4)
-        self.e5 = Entidade("Demonio Teste 5", self.tipo_fogo, self.ataques, 123, 123, 200, 200, 50, 40, 20, False, 0, self.img5)
-        self.e6 = Entidade("Demonio Teste 6", self.tipo_gelo, self.ataques, 456, 456, 300, 200, 50, 40, 20, False, 0, self.img6)
-        self.e7 = Entidade("Demonio Teste 7", self.tipo_vento, self.ataques, 789, 789, 400, 200, 50, 40, 20, False, 0, self.img7)
-        self.e8 = Entidade("Demonio Teste 8", self.tipo_raio, self.ataques, 912, 912, 500, 200, 50, 40, 20, False, 0, self.img8)
-        self.e9 = Entidade("Demonio Teste 9", self.tipo_fogo, self.ataques, 123, 123, 200, 200, 50, 40, 20, False, 0, self.img9)
-        self.e10 = Entidade("Demonio Teste 10", self.tipo_gelo, self.ataques, 456, 456, 300, 200, 50, 40, 20, False, 0, self.img10)
-        self.e11 = Entidade("Demonio Teste 11", self.tipo_vento, self.ataques, 789, 789, 400, 200, 50, 40, 20, False, 0, self.img11)
-        self.e12 = Entidade("Demonio Teste 12", self.tipo_raio, self.ataques, 912, 912, 500, 200, 50, 40, 20, False, 0, self.img12)
-        self.e13 = Entidade("Demonio Teste 13", self.tipo_fogo, self.ataques, 123, 123, 200, 200, 50, 40, 20, False, 0, self.img13)
-        self.e14 = Entidade("Demonio Teste 14", self.tipo_gelo, self.ataques, 456, 456, 300, 200, 50, 40, 20, False, 0, self.img14)
-        self.e15 = Entidade("Demonio Teste 15", self.tipo_vento, self.ataques, 789, 789, 400, 200, 50, 40, 20, False, 0, self.img15)
-        self.e16 = Entidade("Demonio Teste 16", self.tipo_raio, self.ataques, 912, 912, 500, 200, 50, 40, 20, False, 0, self.img16)
+        self.img17 = PhotoImage(file='images/sprites/demonios/demo17.png')
+        self.img17 = self.img17.zoom(2)
 
-        #Humanos
+        self.img18 = PhotoImage(file='images/sprites/demonios/demo18.png')
+        self.img18 = self.img18.zoom(2)
+
+        self.img19 = PhotoImage(file='images/sprites/demonios/demo19.png')
+        self.img19 = self.img19.zoom(2)
+
+        self.img20 = PhotoImage(file='images/sprites/demonios/demo20.png')
+        self.img20 = self.img20.zoom(2)
+        
+        self.e1 = Entidade('Will O Wisp', self.tipo_escuro, [self.mudo, self.hama, self.zan, self.mordida],
+                200, 120, 55, 34, 21, False, 1, self.img1)
+        self.e2 = Entidade('Slime', self.tipo_escuro, [self.mudo, self.mudoon, self.hamaon, self.zio],
+                215, 90, 43, 65, 38, False, 1, self.img2)
+        self.e3 = Entidade('Zhen', self.tipo_raio, [self.zio, self.agi, self.hama, self.zionga], 
+                170, 140, 45, 77, 38, False, 1, self.img3)
+        self.e4 = Entidade('Erthys', self.tipo_vento, [self.agi, self.agilao, self.zan, self.zanma], 
+                195, 190, 60, 35, 26, False, 1, self.img4)
+        self.e5 = Entidade("Shiisaa", self.tipo_luz, [self.mudo, self.hama, self.hamabarion, self.zan], 
+                250, 120, 70, 50, 44, False, 1, self.img5)
+        self.e6 = Entidade('Take-Minakata', self.tipo_fogo, [self.agilao, self.bufu, self.agidyne, self.hama], 
+                215, 90, 43, 65, 38, False, 1, self.img6)
+        self.e7 = Entidade('Ame-no-Uzume', self.tipo_raio, [self.zio, self.agi, self.mudo, self.ziobarion], 
+                170, 140, 80, 77, 38, False, 1, self.img7)
+        self.e8 = Entidade('Inugami', self.tipo_vento, [self.agi, self.hama, self.zan, self.zanma], 
+                195, 160, 60, 55, 26, False, 1, self.img8)
+        self.e9 = Entidade('Shikigami', self.tipo_gelo, [self.bufu, self.hama, self.bufula, self.mordida], 
+                170, 130, 35, 54, 34, False, 1, self.img9)
+        self.e10 = Entidade('Angel', self.tipo_escuro, [self.mudobarion, self.mudoon, self.hamaon, self.zionga], 
+                215, 110, 84, 70, 38, False, 1, self.img10)
+        self.e11 = Entidade('Karasu Tengu', self.tipo_raio, [self.zio, self.espingarda, self.hama, self.zionga], 
+                160, 80, 41, 33, 26, False, 1, self.img11)
+        self.e12 = Entidade('Mara', self.tipo_fogo, [self.agi, self.agilao, self.corte, self.espingarda], 
+                195, 190, 60, 45, 40, False, 1, self.img12)
+        self.e13 = Entidade('Beelzebub', self.tipo_gelo, [self.bufubarion, self.hamabarion, self.hama, self.mudo], 
+                250, 140, 75, 64, 41, False, 1, self.img13)
+        self.e14 = Entidade('Mada', self.tipo_luz, [self.hamabarion, self.mudoon, self.hamaon, self.ziodyne], 
+                215, 120, 65, 68, 39, False, 1, self.img14)
+        self.e15 = Entidade('Hresvelgr', self.tipo_raio, [self.ziobarion, self.agibarion, self.hama, self.zionga], 
+                200, 180, 78, 42, 38, False, 1, self.img15)
+        self.e16 = Entidade('Yatagarasu', self.tipo_vento, [self.hamaon, self.agilao, self.zanbarion, self.zanma], 
+                195, 190, 78, 56, 32, False, 1, self.img16)
+        self.e17 = Entidade('Vishnu', self.tipo_gelo, [self.bufula, self.hama, self.bufudyne, self.mordida], 
+                200, 130, 60, 44, 25, False, 1, self.img17)
+        self.e18 = Entidade('Shiva', self.tipo_escuro, [self.mudo, self.mudoon, self.hamaon, self.zio], 
+                215, 90, 43, 65, 38, False, 1, self.img18)
+        self.e19 = Entidade('Cu Chulainn', self.tipo_luz, [self.hamabarion, self.hamaon, self.mudobarion, self.mudoon], 
+                180, 146, 47, 77, 38, False, 1, self.img19)
+        self.e20 = Entidade('Metatron', self.tipo_fogo, [self.agi, self.agibarion, self.zan, self.mudoon], 
+                215, 190, 54, 37, 22, False, 1, self.img20)
+
+        self.todosDemonios = [
+            self.e1,
+            self.e2,
+            self.e3,
+            self.e4,
+            self.e5,
+            self.e6,
+            self.e7,
+            self.e8,
+            self.e9,
+            self.e10,
+            self.e11,
+            self.e12,
+            self.e13,
+            self.e14,
+            self.e15,
+            self.e16,
+            self.e17,
+            self.e18,
+            self.e19,
+            self.e20
+        ]
+
+        #HUMANOS
         self.img_h1 = PhotoImage(file='images/sprites/humanos/humano1.png')
         self.img_h1 = self.img_h1.zoom(2)
 
@@ -159,10 +220,23 @@ class Batalha:
         self.img_h4 = PhotoImage(file='images/sprites/humanos/humano4.png')
         self.img_h4 = self.img_h4.zoom(2)
 
-        self.h1 = Entidade("Humano Teste 1", self.tipo_fisico, self.ataques, 400, 500, 100, 100, 10, 20, 30, True, 0, self.img_h1)
-        self.h2 = Entidade("Humano Teste 2", self.tipo_fisico, self.ataques, 400, 500, 100, 100, 10, 20, 30, True, 0, self.img_h2)
-        self.h3 = Entidade("Humano Teste 3", self.tipo_fisico, self.ataques, 500, 500, 100, 100, 10, 20, 30, True, 0, self.img_h3)
-        self.h4 = Entidade("Humano Teste 4", self.tipo_fisico, self.ataques, 500, 500, 100, 100, 10, 20, 30, True, 0, self.img_h4)
+        self.h1 = Entidade("Humano Teste 1", self.tipo_fisico, self.atqHumanos, 400, 100, 10, 20, 30, True, 0, self.img_h1)
+        self.h2 = Entidade("Humano Teste 2", self.tipo_fisico, self.atqHumanos, 400, 100, 10, 20, 30, True, 0, self.img_h2)
+        self.h3 = Entidade("Humano Teste 3", self.tipo_fisico, self.atqHumanos, 500, 100, 10, 20, 30, True, 0, self.img_h3)
+        self.h4 = Entidade("Humano Teste 4", self.tipo_fisico, self.atqHumanos, 500, 100, 10, 20, 30, True, 0, self.img_h4)
+
+    def defineFusoes(self):
+        self.fusoes = {}
+
+        for i in self.todosDemonios:
+            for j in self.todosDemonios:
+                if [i.getNome(), j.getNome()] not in self.fusoes.values() and [j.getNome(), i.getNome()] not in self.fusoes.values():
+                    fusao = choice(self.todosDemonios)
+                    if fusao in self.fusoes.keys():
+                        self.fusoes[fusao].append([i.getNome(), j.getNome()])
+                    else:
+                        self.fusoes[fusao] = [[i.getNome(), j.getNome()]]
+
 
     def defineItens(self):
         #Cura
@@ -209,13 +283,12 @@ class Batalha:
             self.jogadorAtual = self.j2
             self.jogadorOutro = self.j1
     
-    def executaAtaques(self, atacante, alvo, ataque):
+    def executaAtaques(self, atacante, alvo, ataque, listaCampoCells, atualCell):
         res = self.avaliarAtaque(ataque.getTipo(), alvo.getTipo())
-        #print(res)
         modificador = self.calcularModificadorDano(res)
         self.causarDano(atacante, alvo, ataque, res, modificador)
         atacante.modificarMagia(ataque.getCusto() * -1)
-        self.calcularTurnos("ataque", res)
+        self.calcularTurnos("ataque", res, listaCampoCells, atualCell)
 
     def usarItem(self, item, alvo) -> None:
         tipo = item.getTipo()
@@ -262,12 +335,13 @@ class Batalha:
     def selecionarAlvoitem(itemIndex: int, local: int, entidadeIndex: int) -> list:
         pass
 
-    def invocar(self, cell1, cell2) -> None:
+    def invocar(self, cell1, cell2, listaCampoCells, atualCell) -> None:
         tempEnt = cell1.getEntidade()
-        cell1.clearEntidade()
         cell1.setEntidade(cell2.getEntidade())
         cell2.setEntidade(tempEnt)
-        self.calcularTurnos("invocar", "")
+        cell1.changeLocal()
+        cell2.changeLocal()
+        self.calcularTurnos("invocar", "", listaCampoCells, atualCell)
 
     def definirTrocaReserva(self, index: int) -> int:
         pass
@@ -275,13 +349,20 @@ class Batalha:
     def definirTrocaCampo(self, index: int, vazio: bool) -> int:
         pass
 
-    def calcularTurnos(self, caso: str, resAtaque: str) -> None:
+    def calcularTurnos(self, caso: str, resAtaque: str, listaCampoCells: list, atualCell) -> None:
         custoAtaque = 0
         if caso == "ataque":
             custoAtaque = self.calculaCustoAtaque(resAtaque)
         custoTurno = self.calculaCustoTurno(caso, custoAtaque)
         self.jogadorAtual.diminuiTurnos(custoTurno)
-        #IMPLEMENTAR TROCA DE JOGADORES
+        self.interface.setAtaques(self.interface.atualCell.getEntidade().getAtaques())
+        self.verificaVencedor()
+        if self.jogadorAtual.getTurnos() <= 0:
+            self.jogadorAtual.setTurnos(10)
+            self.mudaJogadorAtual()
+            self.interface.resetJogadores()
+            self.atualIndex = 0
+        self.mudaEntidadeAtual(listaCampoCells, atualCell)
 
     def calculaCustoAtaque(self, resAtaque: str) -> int:
         if resAtaque == "fraco":
@@ -307,8 +388,39 @@ class Batalha:
         else:
             return 1
 
+    def mudaEntidadeAtual(self, listaCampoCells, atualCell):
+        achouNovo = False
+        #Checa se na frente
+        for i in range(4):
+            if achouNovo:
+                break
+            elif (not listaCampoCells[i].getVazio()) and i > self.atualIndex:
+                self.atualIndex = i
+                atualCell.setEntidade(listaCampoCells[i].getEntidade())
+                atualCell.updateStats()
+                achouNovo = True
+            else:
+                continue
+        
+        if achouNovo:
+            return
+        else:
+            #Checa se a tras
+            for i in range(4):
+                if achouNovo:
+                    break
+                elif (not listaCampoCells[i].getVazio()) and i < self.atualIndex:
+                    self.atualIndex = i
+                    atualCell.setEntidade(listaCampoCells[i].getEntidade())
+                    atualCell.updateStats()
+                    achouNovo = True
+                else:
+                    continue
+
     def mudaJogadorAtual(self) -> None:
-        pass
+        temp = self.jogadorAtual
+        self.jogadorAtual = self.jogadorOutro
+        self.jogadorOutro = temp
 
     def ataque(self) -> None:
         pass
@@ -348,13 +460,39 @@ class Batalha:
             atacante.modificarVida(danoTotal * -1)
         elif res == "absorve":
             alvo.modificarVida(danoTotal)
-        elif (atacante.sorte + randint(0, 50) > 70:
+        elif (atacante.sorte + randint(0, 50)) > 70:
               alvo.modificarVida(danoTotal * -2)
         else:
             alvo.modificarVida(danoTotal * -1)
 
-    def fundir(self) -> None:
-        pass
+    def fundir(self, cell1, cell2, listaCampoCells, atualCell) -> None:
+        resRef = None
+        d1 = cell1.getEntidade()
+        d2 = cell2.getEntidade()
+
+        for key, value in self.fusoes.items():
+            if [d1.getNome(), d2.getNome()] in value or [d2.getNome(), d1.getNome()] in value:
+                resRef = key
+                break
+        
+        params = resRef.getParamsFusao()
+        res = Entidade(params[0], params[1], params[2], params[3], params[4],
+                        params[5], params[6], params[7], params[8],
+                        params[9], params[10])
+        
+        newCell = None
+        if d1.getLocal() == 1:
+            newCell = cell1
+        elif d2.getLocal() == 1:
+            newCell = cell2
+        else:
+            newCell = cell1
+
+        cell1.setEntidade(None)
+        cell2.setEntidade(None)
+        newCell.setEntidade(res)
+
+        self.calcularTurnos("fusao", "", listaCampoCells, atualCell)
 
     def definirFusão1(self, material: Entidade, local: int) -> None:
         pass
@@ -376,10 +514,35 @@ class Batalha:
         pass
 
     def verificaVencedor(self) -> Jogador:
-        if self.jogadorAtual.vencedor == True:
-            return self.jogadorAtual
-        elif self.jogadorOutro.vencedor == True:
-            return self.jogadorOutro
+        timeAtual = self.jogadorAtual.getTimeInteiro()
+        humanoMorto = False
+        demoniosMortos = 0
+
+        for i in timeAtual:
+            if i.getEhHumano() and not i.getVivo():
+                humanoMorto = True
+                break
+            elif not i.getEhHumano() and not i.getVivo():
+                demoniosMortos += 1
+
+        if humanoMorto or demoniosMortos == len(timeAtual) - 1:
+            print("Jogador Outro ganhou!")
+            return
+
+        humanoMorto = False
+        demoniosMortos = 0
+        timeOutro = self.jogadorOutro.getTimeInteiro()
+
+        for i in timeOutro:
+            if i.getEhHumano() and not i.getVivo():
+                humanoMorto = True
+                break
+            elif not i.getEhHumano() and not i.getVivo():
+                demoniosMortos += 1
+
+        if humanoMorto or demoniosMortos == len(timeOutro) - 1:
+            print("Jogador Atual ganhou!")
+            return
 
     def defineEscolha(escolha: str) -> None:
         pass
@@ -393,47 +556,17 @@ class Batalha:
     def getJogadorOutro(self):
         return self.jogadorOutro
 
-
-
-    demons = ['Will O Wisp', 'Preta', 'Zhen', 'Erthys', "Shiisaa", 'Take-Minakata', 'Ame-no-Uzume', 'Inugami', 'Shikigami', 'Angel', 'Karasu Tengu' 'Mara', 'Beelzebub', 'Mada', 'Hresvelgr', 'Yatagarasu', 'Vishnu', 'Shiva', 'Cu Chulainn', 'Metatron', 'Genesha']
-
-    #demons[i][0] = tipo
-    #demons[i][1] = Ataques
-    #demons[i][2-6] = maxHp, maxMp, atk, deF, luk,
-    defdemons = {
-                    str(demons[0]) : ["Escuro", ["Mudom", "Hama", "Zan", "Mordida"], 200, 120, 55, 34, 21],
-                    str(demons[1]) : ["Escuro", ["Mudom", "Mudoon", "Hamaon", "Zio"], 215, 90, 43, 65, 38],
-                    str(demons[2]) : ["Raio", ["Zio", "Agi", "Hama", "Zionga"], 170, 140, 45, 77, 38],
-                    str(demons[3]) : ["Vento", ["Agi", "Agilao", "Zan", "Zanma"], 195, 190, 60, 35, 26],
-                    str(demons[4]) : ["Luz", ["Mudom", "Hama", "Hamabarion", "Zan"], 250, 120, 70, 50, 44],
-                    str(demons[5]) : ["Fogo", ["Agilao", "Bufu", "Agidyne", "Hama"], 215, 90, 43, 65, 38],
-                    str(demons[6]) : ["Raio", ["Zio", "Agi", "Mudom", "Ziobarion"], 170, 140, 80, 77, 38],
-                    str(demons[7]) : ["Vento", ["Agi", "Hama", "Zan", "Zanma"], 195, 160, 60, 55, 26],
-                    str(demons[8]) : ["Gelo", ["Bufu", "Hama", "Bufula", "Mordida"], 170, 130, 35, 54, 34],
-                    str(demons[9]) : ["Escuro", ["Mudobarion", "Mudoon", "Hamaon", "Zionga"], 215, 110, 84, 70, 38],
-                    str(demons[10]) : ["Raio", ["Zio", "Espingarda", "Hama", "Zionga"], 160, 80, 41, 33, 26],
-                    str(demons[11]) : ["Fogo", ["Agi", "Agilao", "Corte", "Espingarda"], 195, 190, 60, 45, 40],
-                    str(demons[12]) : ["Gelo", ["Bufubarion", "Hamabarion", "Hama", "Mudo"], 250, 140, 75, 64, 41],
-                    str(demons[13]) : ["Luz", ["Hamabarion", "Mudoon", "Hamaon", "Ziodyne"], 215, 120, 65, 68, 39],
-                    str(demons[14]) : ["Raio", ["Ziobarion", "Agibarion", "Hama", "Zionga"], 200, 180, 78, 42, 38],
-                    str(demons[15]) : ["Vento", ["Hamaon", "Agilao", "Zanbaryon", "Zanma"], 195, 190, 78, 56, 32],
-                    str(demons[16]) : ["Gelo", ["Bufula", "Hama", "Bufudyne", "Mordida"], 200, 130, 60, 44, 25],
-                    str(demons[17]) : ["Escuro", ["Mudom", "Mudoon", "Hamaon", "Zio"], 215, 90, 43, 65, 38],
-                    str(demons[18]) : ["Luz", ["Hamabarion", "Hamaon", "Mudobarion", "Mudoon"], 180, 146, 47, 77, 38],
-                    str(demons[19]) : ["Fogo", ["Agi", "Agibarion", "Zan", "Mudoon"], 215, 190, 54, 37, 22],
-}
     def createTeams(self):
-        
         teams = []
         camp = []
         reserve = []
         while len(camp) < 3:
-            demon = choice(self.demons)
+            demon = choice(self.todosDemonios)
             print(demon)
             if demon not in camp:
                 camp.append(demon)
         while len(reserve) < 4:
-            demon = choice(self.demons)
+            demon = choice(self.todosDemonios)
             if demon not in reserve and demon not in camp:
                 reserve.append(demon)
         if (len(camp)+len(reserve)) == 7:
@@ -442,24 +575,3 @@ class Batalha:
             print(teams)
         
         return teams
-    
-    def createFusions(self) -> dict:
-        fusoes = {}
-
-        for i in self.defdemons.keys():
-            for j in self.defdemons.keys():
-                if [i, j] not in fusoes.values():
-                    fusao = choice(self.demons)
-                    if fusao in fusoes.keys():
-                        fusoes[fusao].append([i, j])
-                    else:
-                        fusoes[fusao] = [[i, j]]
-        return fusoes
-
-    def Fusao(self, fusoes: dict, demonio1: Entidade, demonio2: Entidade) -> Entidade:
-        r_fusao = 0
-        for i, j in fusoes.items():
-            if i == [demonio1.name(), demonio2.name()]:
-                r_fusao = j
-        return r_fusao
-

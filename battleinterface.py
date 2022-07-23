@@ -15,15 +15,18 @@ class BattleInterface:
         self.main_window.geometry("1280x720")
         self.main_window.resizable(FALSE,FALSE)
 
-        self.batalha = Batalha()
+        self.batalha = Batalha(self)
 
-        #"ataque", "item", "invoca1" ou "invoca2"
+        #"ataque", "item", "invoca1", "invoca2", "fusao1", "fusao2"
         self.tipoSelecao = ""
         self.ataqueSelecionado = None
         self.itemSelecionado = None
 
         self.reservaSelecionado = None
         self.campoSelecionado = None
+
+        self.fusao1 = None
+        self.fusao2 = None
 
         #Definindo objetos
         self.defineJogadores()
@@ -46,9 +49,10 @@ class BattleInterface:
         self.placePlayerCells()
         self.placeEnemyCells()
         self.formatEntityCells()
-        self.telaFinal()
         #TESTE
-        ##self.setJogadoresTest()
+        self.setJogadores()
+        
+        #self.telaFinal()
 
         #SEMPRE POR ULTIMO
         self.main_window.mainloop()
@@ -73,7 +77,7 @@ class BattleInterface:
     def defineMainButtons(self):
         self.ataque_button = Button(self.menu_frame ,bg="grey99", text="Ataque", command=lambda:self.replaceMainWithAtaque())
         self.item_button = Button(self.menu_frame ,bg="grey99", text="Itens", command=lambda:self.replaceMainWithItem())
-        self.fundir_button = Button(self.menu_frame ,bg="grey99", text="Fusão", command=lambda:self.debug_button("Ritual de fusão") )
+        self.fundir_button = Button(self.menu_frame ,bg="grey99", text="Fusão", command=lambda:self.replaceMainWithFusao())
         self.invocar_button = Button(self.menu_frame ,bg="grey99", text="Invocar", command=lambda:self.replaceMainWithInvocar())
         self.passar_button = Button(self.menu_frame ,bg="grey99", text="Passar Turno", command=lambda:self.passarTurno())
 
@@ -184,8 +188,10 @@ class BattleInterface:
         self.cancelaAtaqueSelectButton = Button(self.menu_frame, bg = "grey99", text="Cancela", command=lambda:self.replaceAtaqueSelectWithMain())
         self.cancelaItemSelectButton = Button(self.menu_frame, bg = "grey99", text="Cancela", command=lambda:self.replaceItemSelectWithMain())
         self.cancelaInovcarButton = Button(self.menu_frame, bg = "grey99", text="Cancela", command=lambda:self.replaceInvocarWithMain())
+        self.cancelaFusaoButton = Button(self.menu_frame, bg = "grey99", text="Cancela", command=lambda:self.replaceFusaoWithMain())
 
         self.confirmaInvocarButton = Button(self.menu_frame, bg = "grey99", text="Confirma", command=lambda:self.confirmaInvocar())
+        self.confirmaFusaoButton = Button(self.menu_frame, bg = "grey99", text="Confirma", command=lambda:self.confirmaFusao())
 
 
     #INICIALIZAR CELULAS
@@ -220,7 +226,8 @@ class BattleInterface:
         for widget in self.main_window.place_slaves():
             widget.place_forget()
 
-    def setJogadoresTest(self):
+    def setJogadores(self):
+        self.defineJogadores()
         inimigos = self.jogadorOutro.getCampo()
         inimigos_humano = self.jogadorOutro.getHumano()
         self.enemyCells[0].setEntidade(inimigos_humano)
@@ -234,12 +241,39 @@ class BattleInterface:
         for i, entidade in enumerate(campo):
             self.campoCells[i+1].setEntidade(entidade)
         for i, entidade in enumerate(reserva):
+            print(entidade)
             self.reservaCells[i].setEntidade(entidade)
         self.atualCell.setEntidade(self.campoCells[0].getEntidade())
 
         self.setItems(self.jogadorAtual.getTodosItens())
         self.setAtaques(self.atualCell.getEntidade().getAtaques())
+        self.inimigoReservaEntidades = self.jogadorOutro.getReserva()
 
+    def resetJogadores(self):
+        self.defineJogadores()
+        campoPassado = []
+        for cell in self.campoCells:
+            campoPassado.append(cell.getEntidade())
+        reservaPassado = []
+        for cell in self.reservaCells:
+            reservaPassado.append(cell.getEntidade())
+        inimigosPassado = []
+        for cell in self.enemyCells:
+            inimigosPassado.append(cell.getEntidade())
+        inimigosReservaPassado = []
+        for entidade in self.inimigoReservaEntidades:
+            inimigosReservaPassado.append(entidade)
+
+        for i in range(4):
+            self.campoCells[i].setEntidade(inimigosPassado[i])
+            self.reservaCells[i].setEntidade(inimigosReservaPassado[i])
+            self.enemyCells[i].setEntidade(campoPassado[i])
+            self.inimigoReservaEntidades[i] = reservaPassado[i]
+
+        self.atualCell.setEntidade(self.campoCells[0].getEntidade())
+
+        self.updateTurnos()
+        
     #Seleção geral
     def alvoSelecionado(self, cell):
         if self.tipoSelecao == "ataque":
@@ -250,6 +284,12 @@ class BattleInterface:
             self.alvoSelecionadoInvocar1(cell)
         elif self.tipoSelecao == "invocar2":
             self.alvoSelecionadoInvocar2(cell)
+        elif self.tipoSelecao == "fusao1":
+            self.alvoSelecionadoFusao1(cell)
+        elif self.tipoSelecao == "fusao2":
+            self.alvoSelecionadoFusao2(cell)
+        else:
+            print("ERRO")
 
     #CASO DE USO ATAQUE
     def replaceMainWithAtaque(self):
@@ -276,7 +316,7 @@ class BattleInterface:
         self.selectionLabel.place(x=0, y=75, width=128, height=75)
         self.cancelaAtaqueSelectButton.place(x=0, y=150, width=128, height=55)
         for inimigo in self.enemyCells:
-            if inimigo.getEntidade() != None:
+            if inimigo.getEntidade() != None and inimigo.getVivo():
                 inimigo.startSelection()
         self.ataqueSelecionado = atq
         self.tipoSelecao = "ataque"
@@ -292,7 +332,7 @@ class BattleInterface:
 
     def alvoSelecionadoAtaque(self, alvo):
         alvoEntidade = alvo.getEntidade()
-        self.batalha.executaAtaques(self.atualCell.getEntidade(), alvoEntidade, self.ataqueSelecionado)
+        self.batalha.executaAtaques(self.atualCell.getEntidade(), alvoEntidade, self.ataqueSelecionado, self.campoCells, self.atualCell)
         self.atualCell.updateStats()
         alvo.updateStats()
         self.updateTurnos()
@@ -346,7 +386,7 @@ class BattleInterface:
 
     def alvoSelecionadoItem(self, alvo):
         alvoEntidade = alvo.getEntidade()
-        self.batalha.usarItem(self.itemSelecionado, alvoEntidade)
+        self.batalha.usarItem(self.itemSelecionado, alvoEntidade, self.campoCells, self.atualCell)
         alvo.updateStats()
         self.atualCell.updateStats()
         self.updateTurnos()
@@ -388,7 +428,8 @@ class BattleInterface:
         for ent in self.reservaCells:
             ent.endSelection()
         for ent in self.campoCells:
-            ent.startSelection()
+            if not ent.getEhHumano():
+                ent.startSelection()
         self.tipoSelecao = "invocar2"
 
     def alvoSelecionadoInvocar2(self, cell):
@@ -401,7 +442,7 @@ class BattleInterface:
         self.confirmaInvocarButton.place(x=0, y=280, width=128, height=55)
         
     def confirmaInvocar(self):
-        self.batalha.invocar(self.reservaSelecionado, self.campoSelecionado)
+        self.batalha.invocar(self.reservaSelecionado, self.campoSelecionado, self.campoCells, self.atualCell)
         self.reservaSelecionado.updateStats()
         self.campoSelecionado.updateStats()
         self.reservaSelecionado = None
@@ -409,10 +450,66 @@ class BattleInterface:
         self.updateTurnos()
         self.replaceInvocarWithMain()
 
+    #CASO DE USO FUSAO
+    def replaceMainWithFusao(self):
+        self.unplaceMainButtons()
+        labelText = "SELECIONADO:"
+        self.selectionLabel.configure(text=labelText)
+        self.selectionLabel2.configure(text=labelText)
+        self.selectionLabel.place(x=0, y=75, width=128, height=75)
+        self.selectionLabel2.place(x=0, y=150, width=128, height=75)
+        self.cancelaFusaoButton.place(x=0, y=225, width=128, height=55)
+        for cell in self.reservaCells:
+            cell.startSelection()
+        for cell in self.campoCells:
+            if not cell.getEhHumano() and not cell.getVazio():
+                cell.startSelection()
+        self.tipoSelecao = "fusao1"
+
+    def replaceFusaoWithMain(self):
+        for cell in self.reservaCells:
+            cell.endSelection()
+        for cell in self.campoCells:
+            cell.endSelection()
+        self.selectionLabel.place_forget()
+        self.selectionLabel2.place_forget()
+        self.cancelaFusaoButton.place_forget()
+        self.confirmaFusaoButton.place_forget()
+        self.fusao1 = None
+        self.fusao2 = None
+        self.tipoSelecao = ""
+        self.placeMainButtons()
+
+    def alvoSelecionadoFusao1(self, cell):
+        tempNome = cell.getEntidadeNome()
+        labelText = "SELECIONADO: \n" + tempNome
+        self.selectionLabel.configure(text=labelText)
+        self.fusao1 = cell
+        self.tipoSelecao = "fusao2"
+        cell.endSelection()
+
+    def alvoSelecionadoFusao2(self, cell):
+        tempNome = cell.getEntidadeNome()
+        labelText = "SELECIONADO: \n" + tempNome
+        self.selectionLabel2.configure(text=labelText)
+        for ent in self.campoCells:
+            ent.endSelection()
+        for ent in self.reservaCells:
+            ent.endSelection()
+        self.fusao2 = cell
+        self.confirmaFusaoButton.place(x=0, y=280, width=128, height=55)
+
+    def confirmaFusao(self):
+        self.batalha.fundir(self.fusao1, self.fusao2, self.campoCells, self.atualCell)
+        self.fusao1 = None
+        self.fusao2 = None
+        self.updateTurnos()
+        self.replaceFusaoWithMain()
+
 
     #CASO DE USO PASSAR TURNO
     def passarTurno(self):
-        self.batalha.calcularTurnos("passar", "")
+        self.batalha.calcularTurnos("passar", "", self.campoCells, self.atualCell)
         self.updateTurnos()
 
     def telaFinal(self):
