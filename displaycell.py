@@ -52,7 +52,7 @@ class DisplayCell:
     def setEntidade(self, entidade):
         self.entidade = entidade
         if self.entidade == None:
-            self.imagemLabel.configure(image=None)
+            self.imagemLabel.configure(image="")
         else:
             self.imagemLabel.configure(image=self.entidade.getImagem())
         self.updateStats()
@@ -82,7 +82,7 @@ class DisplayCell:
 
     def getLocal(self):
         if self.entidade == None:
-            return "vazio"
+            return "VAZIO"
         else:
             return self.entidade.getLocal()
 

@@ -6,7 +6,8 @@ from random import *
 import copy
 
 class Batalha:
-    def __init__(self):
+    def __init__(self, interface):
+        self.interface = interface
         self.batalhaEmAndamento = False
         self.estagio = "Escolha1"
         self.jogadorAtual = None
@@ -357,8 +358,13 @@ class Batalha:
             custoAtaque = self.calculaCustoAtaque(resAtaque)
         custoTurno = self.calculaCustoTurno(caso, custoAtaque)
         self.jogadorAtual.diminuiTurnos(custoTurno)
+        self.interface.setAtaques(self.interface.atualCell.getEntidade().getAtaques())
+        if self.jogadorAtual.getTurnos() <= 0:
+            self.jogadorAtual.setTurnos(10)
+            self.mudaJogadorAtual()
+            self.interface.resetJogadores()
+            self.atualIndex = 0
         self.mudaEntidadeAtual(listaCampoCells, atualCell)
-        #IMPLEMENTAR TROCA DE JOGADORES
 
     def calculaCustoAtaque(self, resAtaque: str) -> int:
         if resAtaque == "fraco":
@@ -418,7 +424,9 @@ class Batalha:
                     print("n achou")
 
     def mudaJogadorAtual(self) -> None:
-        pass
+        temp = self.jogadorAtual
+        self.jogadorAtual = self.jogadorOutro
+        self.jogadorOutro = temp
 
     def ataque(self) -> None:
         pass

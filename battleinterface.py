@@ -15,7 +15,7 @@ class BattleInterface:
         self.main_window.geometry("1280x720")
         self.main_window.resizable(FALSE,FALSE)
 
-        self.batalha = Batalha()
+        self.batalha = Batalha(self)
 
         #"ataque", "item", "invoca1", "invoca2", "fusao1", "fusao2"
         self.tipoSelecao = ""
@@ -51,7 +51,7 @@ class BattleInterface:
         self.formatEntityCells()
 
         #TESTE
-        self.setJogadoresTest()
+        self.setJogadores()
 
         #SEMPRE POR ULTIMO
         self.main_window.mainloop()
@@ -225,7 +225,8 @@ class BattleInterface:
         for widget in self.main_window.place_slaves():
             widget.place_forget()
 
-    def setJogadoresTest(self):
+    def setJogadores(self):
+        self.defineJogadores()
         inimigos = self.jogadorOutro.getCampo()
         inimigos_humano = self.jogadorOutro.getHumano()
         self.enemyCells[0].setEntidade(inimigos_humano)
@@ -245,7 +246,33 @@ class BattleInterface:
 
         self.setItems(self.jogadorAtual.getTodosItens())
         self.setAtaques(self.atualCell.getEntidade().getAtaques())
+        self.inimigoReservaEntidades = self.jogadorOutro.getReserva()
 
+    def resetJogadores(self):
+        self.defineJogadores()
+        campoPassado = []
+        for cell in self.campoCells:
+            campoPassado.append(cell.getEntidade())
+        reservaPassado = []
+        for cell in self.reservaCells:
+            reservaPassado.append(cell.getEntidade())
+        inimigosPassado = []
+        for cell in self.enemyCells:
+            inimigosPassado.append(cell.getEntidade())
+        inimigosReservaPassado = []
+        for entidade in self.inimigoReservaEntidades:
+            inimigosReservaPassado.append(entidade)
+
+        for i in range(4):
+            self.campoCells[i].setEntidade(inimigosPassado[i])
+            self.reservaCells[i].setEntidade(inimigosReservaPassado[i])
+            self.enemyCells[i].setEntidade(campoPassado[i])
+            self.inimigoReservaEntidades[i] = reservaPassado[i]
+
+        self.atualCell.setEntidade(self.campoCells[0].getEntidade())
+
+        self.updateTurnos()
+        
     #Seleção geral
     def alvoSelecionado(self, cell):
         if self.tipoSelecao == "ataque":
