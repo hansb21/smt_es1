@@ -1,10 +1,13 @@
-from socket import timeout
-from jogador import *
+from tipo import Tipo
+from random import randint
+from item import Item
+from jogador import Jogador
+from random import choice
 from entidade import Entidade
 from ataque import Ataque
 from tkinter import PhotoImage
-from random import *
-import copy
+from team import Time
+from random import randint
 
 class Batalha:
     def __init__(self, interface):
@@ -457,6 +460,8 @@ class Batalha:
             atacante.modificarVida(danoTotal * -1)
         elif res == "absorve":
             alvo.modificarVida(danoTotal)
+        elif (atacante.sorte + randint(0, 50)) > 70:
+              alvo.modificarVida(danoTotal * -2)
         else:
             alvo.modificarVida(danoTotal * -1)
 
@@ -550,3 +555,23 @@ class Batalha:
 
     def getJogadorOutro(self):
         return self.jogadorOutro
+
+    def createTeams(self):
+        teams = []
+        camp = []
+        reserve = []
+        while len(camp) < 3:
+            demon = choice(self.todosDemonios)
+            print(demon)
+            if demon not in camp:
+                camp.append(demon)
+        while len(reserve) < 4:
+            demon = choice(self.todosDemonios)
+            if demon not in reserve and demon not in camp:
+                reserve.append(demon)
+        if (len(camp)+len(reserve)) == 7:
+            teams.append(camp)
+            teams.append(reserve)
+            print(teams)
+        
+        return teams

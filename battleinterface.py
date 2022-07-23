@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import * 
 from turtle import width
 from typing import TextIO
 from item import Item
@@ -49,9 +49,10 @@ class BattleInterface:
         self.placePlayerCells()
         self.placeEnemyCells()
         self.formatEntityCells()
-
         #TESTE
         self.setJogadores()
+        
+        #self.telaFinal()
 
         #SEMPRE POR ULTIMO
         self.main_window.mainloop()
@@ -511,4 +512,32 @@ class BattleInterface:
         self.batalha.calcularTurnos("passar", "", self.campoCells, self.atualCell)
         self.updateTurnos()
 
-    #Mudar entidade
+    def telaFinal(self):
+        self.menu_frame.destroy()
+        self.field_frame.destroy()
+        self.entity_frame.destroy()
+        self.main_window.columnconfigure(0, weight=1)
+        self.main_window.columnconfigure(1, weight=1)
+        self.main_window.rowconfigure(0, weight=1)
+        
+        vencedor = self.batalha.verificaVencedor()
+        if vencedor == self.batalha.jogadorAtual:
+            perdedor = "Jogador 2"
+            vencedor = "Jogador 1"
+        else:
+            vencedor = "Jogador 2"
+            perdedor = "Jogador 1"
+        win = Frame(self.main_window, bg = "red")
+        win.grid(row = 0, column = 0, sticky = "nesw")
+        self.winLabel = Label(win, text = "")
+        
+        loss = Frame(self.main_window, bg= "grey")
+        loss.grid(row = 0, column=1, sticky = "nesw")
+        self.lossLabel = Label(loss, text = "")
+        self.winLabel.configure(text=vencedor)
+        self.winLabel.place(x=0, y=75, width=128, height=75)
+        self.lossLabel.configure(text=perdedor)
+        self.lossLabel.place(x=0, y=75, width=256, height=75)
+        sair = Button(self.main_window, text='Sair')
+        sair.config(height = 2, width = 15)
+        sair.grid(row=4, column=3, sticky = 'se')
