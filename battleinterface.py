@@ -239,6 +239,7 @@ class BattleInterface:
         for i, entidade in enumerate(campo):
             self.campoCells[i+1].setEntidade(entidade)
         for i, entidade in enumerate(reserva):
+            print(entidade)
             self.reservaCells[i].setEntidade(entidade)
         self.atualCell.setEntidade(self.campoCells[0].getEntidade())
 

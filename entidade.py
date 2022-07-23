@@ -5,15 +5,15 @@ from ataque import *
 
 class Entidade:
     def __init__(self, nome : str, tipo: Tipo, ataques: list[Ataque],
-                 hp: int, hpMax:int, mpMax: int, mp: int, forca: int, defesa: int, 
+                 hp: int, mp: int, forca: int, defesa: int, 
                  sorte: int, ehHumano: bool, local: int, imagem):
         self.nome = nome
         self.tipo = tipo
         self.ataques = ataques
         self.vivo = True
         self.hp = hp
-        self.hpMax = hpMax #já podemos pensar em algum valor fixo
-        self.mpMax = mpMax
+        self.hpMax = hp
+        self.mpMax = mp
         self.mp = mp
         self.forca = forca
         self.defesa = defesa
