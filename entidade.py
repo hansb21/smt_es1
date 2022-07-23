@@ -88,3 +88,15 @@ class Entidade:
     def getVivo(self) -> bool :
         return self.vivo
 
+    def getParamsFusao(self):
+        return [self.nome,
+                self.tipo,
+                self.ataques,
+                self.hp,
+                self.mp,
+                self.forca,
+                self.defesa,
+                self.sorte,
+                self.ehHumano,
+                self.local,
+                self.imagem]

@@ -3,7 +3,7 @@ from entidade import Entidade
 from ataque import Ataque
 from tkinter import PhotoImage
 from random import *
-from demonios import Demonios
+import copy
 
 class Batalha:
     def __init__(self):
@@ -227,14 +227,14 @@ class Batalha:
             #print(i)
             for j in self.todosDemonios:
                 #print(j)
-                if [i.getNome(), j.getNome()] not in self.fusoes.values():
+                if [i.getNome(), j.getNome()] not in self.fusoes.values() and [j.getNome(), i.getNome()] not in self.fusoes.values():
                     fusao = choice(self.todosDemonios)
                     if fusao in self.fusoes.keys():
                         self.fusoes[fusao].append([i.getNome(), j.getNome()])
                     else:
                         self.fusoes[fusao] = [[i.getNome(), j.getNome()]]
         
-        print(self.fusoes)
+        print(self.fusoes.keys())
 
 
     def defineItens(self):
@@ -461,8 +461,34 @@ class Batalha:
         else:
             alvo.modificarVida(danoTotal * -1)
 
-    def fundir(self) -> None:
-        pass
+    def fundir(self, cell1, cell2, listaCampoCells, atualCell) -> None:
+        resRef = None
+        d1 = cell1.getEntidade()
+        d2 = cell2.getEntidade()
+
+        for key, value in self.fusoes.items():
+            if [d1.getNome(), d2.getNome()] in value or [d2.getNome(), d1.getNome()] in value:
+                resRef = key
+                break
+        
+        params = resRef.getParamsFusao()
+        res = Entidade(params[0], params[1], params[2], params[3], params[4],
+                        params[5], params[6], params[7], params[8],
+                        params[9], params[10])
+        
+        newCell = None
+        if d1.getLocal() == 1:
+            newCell = cell1
+        elif d2.getLocal() == 1:
+            newCell = cell2
+        else:
+            newCell = cell1
+
+        cell1.setEntidade(None)
+        cell2.setEntidade(None)
+        newCell.setEntidade(res)
+
+        self.calcularTurnos("fusao", "", listaCampoCells, atualCell)
 
     def definirFusão1(self, material: Entidade, local: int) -> None:
         pass

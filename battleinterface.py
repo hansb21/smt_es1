@@ -446,6 +446,7 @@ class BattleInterface:
         self.selectionLabel.place_forget()
         self.selectionLabel2.place_forget()
         self.cancelaFusaoButton.place_forget()
+        self.confirmaFusaoButton.place_forget()
         self.fusao1 = None
         self.fusao2 = None
         self.tipoSelecao = ""
@@ -471,7 +472,11 @@ class BattleInterface:
         self.confirmaFusaoButton.place(x=0, y=280, width=128, height=55)
 
     def confirmaFusao(self):
-        print("foi")
+        self.batalha.fundir(self.fusao1, self.fusao2, self.campoCells, self.atualCell)
+        self.fusao1 = None
+        self.fusao2 = None
+        self.updateTurnos()
+        self.replaceFusaoWithMain()
 
 
     #CASO DE USO PASSAR TURNO
