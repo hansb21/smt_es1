@@ -1,8 +1,11 @@
-from jogador import *
+from tipo import Tipo
+from item import Item
+from jogador import Jogador
 from random import choice
 from entidade import Entidade
 from ataque import Ataque
 from tkinter import PhotoImage
+from team import Time
 from random import randint
 
 class Batalha:
@@ -370,10 +373,10 @@ class Batalha:
         pass
 
     def verificaVencedor(self) -> Jogador:
-        if self.jogador1.vencedor == True:
-            return self.jogador1
-        elif self.jogador2.vencedor == True:
-            return self.jogador2
+        if self.jogadorAtual.vencedor == True:
+            return self.jogadorAtual
+        elif self.jogadorOutro.vencedor == True:
+            return self.jogadorOutro
 
     def defineEscolha(escolha: str) -> None:
         pass
