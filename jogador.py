@@ -85,6 +85,7 @@ class Jogador:
         self.time.restore()
         for i in self.itens:
             i.restore()
+        self.turnos = 10
 
     def getHumano(self):
         return self.time.getHumano()
