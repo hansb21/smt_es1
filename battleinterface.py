@@ -4,6 +4,7 @@ from typing import TextIO
 from item import Item
 from ataque import Ataque
 from tipo import Tipo
+from entidade import Entidade
 from batalha import Batalha
 from storagebutton import StorageButton
 from displaycell import DisplayCell
@@ -524,9 +525,13 @@ class BattleInterface:
         if vencedor == self.batalha.jogadorAtual:
             perdedor = "Jogador 2"
             vencedor = "Jogador 1"
+            self.lossImg = Label(self.main_window, image=self.batalha.jogadorOutro.imagem)
+            self.winImg = Label(self.main_window, image=self.batalha.jogadorAtual.imagem)
         else:
             vencedor = "Jogador 2"
             perdedor = "Jogador 1"
+            self.winImg = Label(self.main_window, image=self.batalha.jogadorOutro.imagem)
+            self.lossImg = Label(self.main_window, image=self.batalha.jogadorAtual.imagem)
         win = Frame(self.main_window, bg = "red")
         win.grid(row = 0, column = 0, sticky = "nesw")
         self.winLabel = Label(win, text = "")
@@ -538,6 +543,7 @@ class BattleInterface:
         self.winLabel.place(x=0, y=75, width=128, height=75)
         self.lossLabel.configure(text=perdedor)
         self.lossLabel.place(x=0, y=75, width=256, height=75)
+        self.lossImg = Label(self.main_window, image=self.batalha.jogadorAtual.imagem)
         sair = Button(self.main_window, text='Sair')
         sair.config(height = 2, width = 15)
         sair.grid(row=4, column=3, sticky = 'se')
