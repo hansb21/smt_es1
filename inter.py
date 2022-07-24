@@ -53,11 +53,11 @@ class PlayerInterface:
         p1b.grid(row=1, column=0)
         p2b.grid(row=1, column=80)
         
-        self.liu_image = PhotoImage(file="images/liu.png")
+        #self.liu_image = PhotoImage(file="images/liu.png")
         for y in range(2):
             a_column = [] # column
-            for x in range(3):
-                dliu = Label(self.message_frame, bd = 0, image=self.liu_image)
+            for x in range(5):
+                dliu = Label(self.message_frame, bd = 0, bg="gray")
                 dliu.grid(row=x+1 , column=y+1)
         confirm_bp1 = Button(self.message_frame, font=("Arial", 10),  text="CONFIRM", bg="gray", height=2, width=15)
         confirm_bp2 = Button(self.message_frame, font=("Arial", 10),  text="CONFIRM", bg="gray", height=2, width=15)
