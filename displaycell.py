@@ -50,6 +50,7 @@ class DisplayCell:
         self.text.configure(state="disabled")
 
     def setEntidade(self, entidade):
+        listaTeste= [entidade]
         self.entidade = entidade
         if self.entidade == None:
             self.imagemLabel.configure(image="")

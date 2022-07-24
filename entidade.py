@@ -100,3 +100,8 @@ class Entidade:
                 self.ehHumano,
                 self.local,
                 self.imagem]
+
+    def restore(self):
+        self.vivo = True
+        self.hp = self.hpMax
+        self.mp = self.mpMax

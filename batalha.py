@@ -1,3 +1,4 @@
+from xmlrpc.client import Boolean
 from tipo import Tipo
 from random import randint
 from item import Item
@@ -20,6 +21,8 @@ class Batalha:
         self.demoniosEscolha = []
         self.demonioFusao = []
         self.atualIndex = 0
+        self.vencedor = None
+        self.perdedor = None
 
         self.defineTipos()
         self.defineAtaques()
@@ -268,8 +271,8 @@ class Batalha:
 
     #Só para teste, remover depois
     def jogadoresTeste(self):
-        self.j1 = Jogador(self.time1, True, False, True, self.itens1, 10)
-        self.j2 = Jogador(self.time2, True, False, True, self.itens1, 10)
+        self.j1 = Jogador("1", self.time1, True, False, True, self.itens1, 10)
+        self.j2 = Jogador("2", self.time2, True, False, True, self.itens1, 10)
 
     def iniciar(self) -> None:
         pass
@@ -290,7 +293,7 @@ class Batalha:
         atacante.modificarMagia(ataque.getCusto() * -1)
         self.calcularTurnos("ataque", res, listaCampoCells, atualCell)
 
-    def usarItem(self, item, alvo) -> None:
+    def usarItem(self, item, alvo, listaCampoCells, atualCell) -> None:
         tipo = item.getTipo()
         potencia = item.getPotencia()
         if tipo == "cura":
@@ -300,7 +303,7 @@ class Batalha:
         elif tipo == "revive":
             alvo.reviver(potencia)
         item.diminuiQtd()
-        self.calcularTurnos("item", "")
+        self.calcularTurnos("item", "", listaCampoCells, atualCell)
 
     def iniciarBatalha(self) -> None:
         pass
@@ -356,13 +359,15 @@ class Batalha:
         custoTurno = self.calculaCustoTurno(caso, custoAtaque)
         self.jogadorAtual.diminuiTurnos(custoTurno)
         self.interface.setAtaques(self.interface.atualCell.getEntidade().getAtaques())
-        self.verificaVencedor()
-        if self.jogadorAtual.getTurnos() <= 0:
-            self.jogadorAtual.setTurnos(10)
-            self.mudaJogadorAtual()
-            self.interface.resetJogadores()
-            self.atualIndex = 0
-        self.mudaEntidadeAtual(listaCampoCells, atualCell)
+        if not self.verificaVencedor():
+            if self.jogadorAtual.getTurnos() <= 0:
+                self.jogadorAtual.setTurnos(10)
+                self.mudaJogadorAtual()
+                self.interface.resetJogadores()
+                self.atualIndex = 0
+            self.mudaEntidadeAtual(listaCampoCells, atualCell)
+        else:
+            self.interface.telaFinal()
 
     def calculaCustoAtaque(self, resAtaque: str) -> int:
         if resAtaque == "fraco":
@@ -513,8 +518,10 @@ class Batalha:
     def avaliaVencedor(self) -> None:
         pass
 
-    def verificaVencedor(self) -> Jogador:
+    def verificaVencedor(self) -> Boolean:
         timeAtual = self.jogadorAtual.getTimeInteiro()
+        print("TIME ATUAL:")
+        print(timeAtual)
         humanoMorto = False
         demoniosMortos = 0
 
@@ -527,11 +534,15 @@ class Batalha:
 
         if humanoMorto or demoniosMortos == len(timeAtual) - 1:
             print("Jogador Outro ganhou!")
-            return
+            self.vencedor = self.jogadorOutro
+            self.perdedor = self.jogadorAtual
+            return True
 
         humanoMorto = False
         demoniosMortos = 0
         timeOutro = self.jogadorOutro.getTimeInteiro()
+        print("TIME OUTRO")
+        print(timeOutro)
 
         for i in timeOutro:
             if i.getEhHumano() and not i.getVivo():
@@ -541,8 +552,12 @@ class Batalha:
                 demoniosMortos += 1
 
         if humanoMorto or demoniosMortos == len(timeOutro) - 1:
+            self.vencedor = self.jogadorAtual
+            self.perdedor = self.jogadorOutro
             print("Jogador Atual ganhou!")
-            return
+            return True
+
+        return False
 
     def defineEscolha(escolha: str) -> None:
         pass
@@ -575,3 +590,10 @@ class Batalha:
             print(teams)
         
         return teams
+
+    def getResultado(self):
+        return [self.vencedor, self.perdedor]
+
+    def restore(self):
+        self.jogadorAtual.restore()
+        self.jogadorOutro.restore()

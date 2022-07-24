@@ -3,7 +3,8 @@ from item import Item
 from team import Time
 from tipo import Tipo
 class Jogador:
-    def __init__(self, time: Time, seuTurno: bool, vencedor: bool, jogando: bool, itens: list, turnos: int):
+    def __init__(self, nome: str, time: Time, seuTurno: bool, vencedor: bool, jogando: bool, itens: list, turnos: int):
+        self.nome = nome
         self.time = time
         self.seuTurno = seuTurno
         self.vencedor = vencedor
@@ -41,9 +42,6 @@ class Jogador:
     def getHumano(self) -> Entidade :
         return self.time.getHumano()
 
-    def invocar(self, entidadeIndex1: int, entidadeIndex2: int, vazio: bool) -> None:
-        self.time.invocar(entidadeIndex1, entidadeIndex2, vazio)
-
     def diminuiTurnos(self, qtd: int) -> None:
         self.turnos -= qtd
 
@@ -79,4 +77,15 @@ class Jogador:
     
     def setVencedor(self, vencedor: bool) -> None:
             self.vencedor = vencedor
+
+    def getNome(self):
+        return self.nome
+
+    def restore(self):
+        self.time.restore()
+        for i in self.itens:
+            i.restore()
+
+    def getHumano(self):
+        return self.time.getHumano()
 
