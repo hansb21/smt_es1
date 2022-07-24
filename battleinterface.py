@@ -29,10 +29,23 @@ class BattleInterface:
         self.fusao1 = None
         self.fusao2 = None
 
-        #Definindo objetos
-        self.defineJogadores()
+        self.iniciar()
+        
+        #self.telaFinal()
 
-        #Definindo elementos GUI
+        #SEMPRE POR ULTIMO
+        self.main_window.mainloop()
+
+    #CASO DE USO INICIAR
+    def iniciar(self):
+        #Restaura
+        self.batalha.restore()
+        
+        #Limpa tela
+        self.unplaceAll()
+
+        #Definindo elementos
+        self.defineJogadores()
         self.defineFrames()
         self.defineMainButtons()
         self.defineItemButtons()
@@ -52,11 +65,6 @@ class BattleInterface:
         self.formatEntityCells()
         #TESTE
         self.setJogadores()
-        
-        #self.telaFinal()
-
-        #SEMPRE POR ULTIMO
-        self.main_window.mainloop()
 
     #Jogadores
     def defineJogadores(self):
@@ -133,9 +141,11 @@ class BattleInterface:
     #TURNOS CELL
     def defineTurnosCell(self):
         self.turnosCell = DisplayCell(self.menu_frame, 128, 75, 5, "Turnos", True, self)
+        self.indicadorJogador = DisplayCell(self.menu_frame, 128, 65, 5, "Jogador Atual", True, self)
 
     def placeTurnosCell(self):
         self.turnosCell.place(0,0)
+        self.indicadorJogador.place(0, 460)
 
     #PLAYER CELLS
     def definePlayerCells(self):
@@ -206,9 +216,11 @@ class BattleInterface:
 
         turnos = str(self.jogadorAtual.getTurnos())
         self.turnosCell.insertText(turnos)
+        self.indicadorJogador.replaceText("1.0", self.jogadorAtual.getNome())
 
     def updateTurnos(self):
         self.turnosCell.replaceText("1.0", str(self.jogadorAtual.getTurnos()))
+        self.indicadorJogador.replaceText("1.0", self.jogadorAtual.getNome())
 
     #MUDA TEXTO BOTOES
     def setItems(self, items):
@@ -242,13 +254,15 @@ class BattleInterface:
         for i, entidade in enumerate(campo):
             self.campoCells[i+1].setEntidade(entidade)
         for i, entidade in enumerate(reserva):
-            print(entidade)
             self.reservaCells[i].setEntidade(entidade)
         self.atualCell.setEntidade(self.campoCells[0].getEntidade())
 
         self.setItems(self.jogadorAtual.getTodosItens())
         self.setAtaques(self.atualCell.getEntidade().getAtaques())
-        self.inimigoReservaEntidades = self.jogadorOutro.getReserva()
+        
+        self.inimigoReservaEntidades = []
+        for i in range(4):
+            self.inimigoReservaEntidades.append(self.jogadorOutro.getReserva()[i])
 
     def resetJogadores(self):
         self.defineJogadores()
@@ -369,8 +383,10 @@ class BattleInterface:
         self.selectionLabel.place(x=0, y=75, width=128, height=75)
         self.cancelaItemSelectButton.place(x=0, y=150, width=128, height=55)
         for i in range(4):
-            self.campoCells[i].startSelection()
-            self.reservaCells[i].startSelection()
+            if not self.campoCells[i].getVazio():
+                self.campoCells[i].startSelection()
+            if not self.reservaCells[i].getVazio():
+                self.reservaCells[i].startSelection()
         self.itemSelecionado = item
         self.tipoSelecao = "item"
 
@@ -514,36 +530,54 @@ class BattleInterface:
         self.updateTurnos()
 
     def telaFinal(self):
-        self.menu_frame.destroy()
-        self.field_frame.destroy()
-        self.entity_frame.destroy()
-        self.main_window.columnconfigure(0, weight=1)
-        self.main_window.columnconfigure(1, weight=1)
-        self.main_window.rowconfigure(0, weight=1)
+
+        self.unplaceAll()
+
+        vencedor = self.batalha.getResultado()[0]
+        perdedor = self.batalha.getResultado()[1]
+
+        telaFinalFrame = Frame(self.main_window, bg="grey99")
+        resultado = Label(telaFinalFrame, text="RESULTADO:", bg="grey99")
         
-        vencedor = self.batalha.verificaVencedor()
-        if vencedor == self.batalha.jogadorAtual:
-            perdedor = "Jogador 2"
-            vencedor = "Jogador 1"
-            self.lossImg = Label(self.main_window, image=self.batalha.jogadorOutro.imagem)
-            self.winImg = Label(self.main_window, image=self.batalha.jogadorAtual.imagem)
-        else:
-            vencedor = "Jogador 2"
-            perdedor = "Jogador 1"
-            self.winImg = Label(self.main_window, image=self.batalha.jogadorOutro.imagem)
-            self.lossImg = Label(self.main_window, image=self.batalha.jogadorAtual.imagem)
-        win = Frame(self.main_window, bg = "red")
-        win.grid(row = 0, column = 0, sticky = "nesw")
-        self.winLabel = Label(win, text = "")
-        
-        loss = Frame(self.main_window, bg= "grey")
-        loss.grid(row = 0, column=1, sticky = "nesw")
-        self.lossLabel = Label(loss, text = "")
-        self.winLabel.configure(text=vencedor)
-        self.winLabel.place(x=0, y=75, width=128, height=75)
-        self.lossLabel.configure(text=perdedor)
-        self.lossLabel.place(x=0, y=75, width=256, height=75)
-        self.lossImg = Label(self.main_window, image=self.batalha.jogadorAtual.imagem)
-        sair = Button(self.main_window, text='Sair')
-        sair.config(height = 2, width = 15)
-        sair.grid(row=4, column=3, sticky = 'se')
+        vencedorTitulo = Label(telaFinalFrame, text="VENCEDOR", bg="grey99")
+        vencedorMostra = Label(telaFinalFrame, bg="grey99")
+
+        perdedorTitulo = Label(telaFinalFrame, text="PERDEDOR", bg="grey99")
+        perdedorMostra = Label(telaFinalFrame, bg="grey99")
+
+        vencedorHumano = Label(telaFinalFrame, bg="grey99")
+        perdedorHumano = Label(telaFinalFrame, bg="grey99")
+
+        resultado.configure(font=("Arial",70))
+        vencedorTitulo.configure(font=("Arial",30))
+        perdedorTitulo.configure(font=("Arial",30))
+        vencedorMostra.configure(font=("Arial",20))
+        perdedorMostra.configure(font=("Arial",20))
+
+        vencedorText = "Jogador " + vencedor.getNome()
+        vencedorMostra.configure(text=vencedorText)
+        perdedorText = "Jogador " + perdedor.getNome()
+        perdedorMostra.configure(text=perdedorText)
+
+        telaFinalFrame.place(x=0, y=0, relwidth=1, relheight=1)
+        resultado.place(relx=0, rely=0, relwidth=1, relheight=0.2)
+
+        vencedorTitulo.place(relx=0, rely=0.2, relwidth=0.5, relheight=0.1)
+        vencedorMostra.place(relx=0, rely=0.3, relwidth=0.5, relheight=0.1)
+
+        perdedorTitulo.place(relx=0.5, rely=0.2, relwidth=0.5, relheight=0.1)
+        perdedorMostra.place(relx=0.5, rely=0.3, relwidth=0.5, relheight=0.1)
+
+        vencedorHumano.configure(image=vencedor.getHumano().getImagem())
+        perdedorHumano.configure(image=perdedor.getHumano().getImagem())
+
+        vencedorHumano.place(relx=0.125, rely=0.4, relheight=0.6, relwidth=0.25)
+        perdedorHumano.place(relx=0.625, rely=0.4, relheight=0.6, relwidth=0.25)
+
+        novamente = Button(telaFinalFrame, text="Jogar novamente", command=self.iniciar)
+        mudar = Button(telaFinalFrame, text = "Mudar times")
+        sair = Button(telaFinalFrame, text = "Sair", command=self.main_window.destroy)
+
+        novamente.place(relx=0.45, rely=0.45, relwidth=0.1, relheight=0.1)
+        mudar.place(relx=0.45, rely=0.60, relwidth=0.1, relheight=0.1)
+        sair.place(relx=0.45, rely=0.75, relwidth=0.1, relheight=0.1)

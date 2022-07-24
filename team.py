@@ -102,30 +102,8 @@ class Time:
         if self.campo[entidadeIndex].mp < 0:
                 self.campo[entidadeIndex].mp = 0
 
-    def fusao(self, local1: int, entidadeIndex1: int, local2: int, entidadeIndex2: int, novoDemonio: Entidade, novoLocal: int, novoIndex: int) -> None:
-
-        self.removerDemonio(local1, entidadeIndex1)
-        self.removerDemonio(local2, entidadeIndex2)
-        self.incluirNovo(novoDemonio=novoDemonio, local=novoIndex, index=novoIndex)    
-
-    def removerDemonio(self, local: int, entidadeIndex: int) -> Entidade:
-        if local == 0:
-            alvo = self.campo[entidadeIndex]
-            self.campo[entidadeIndex] = None
-            return alvo
-        else:
-            alvo = self.reserva[entidadeIndex]
-            self.reserva[entidadeIndex] = None
-            return alvo
-    def incluirNovo(self, novoDemonio: Entidade, local: int, index: int) -> None:
-        if local == 0:
-            if self.campo[index] != None:
-                self.removerDemonio(local, index)
-            
-            self.campo[index] = novoDemonio
-        else:
-            if self.reserva[index] != None:
-                self.removerDemonio(local, index)
-
-            self.campo[index] = novoDemonio
+    def restore(self):
+        timeInteiro = self.getTimeInteiro()
+        for i in timeInteiro:
+            i.restore()
 

@@ -7,6 +7,7 @@ class Item:
         self.tipoItem = tipoItem
         self.potencia = potencia
         self.qtd = qtd
+        self.qtdMax = qtd
 
     def getNome(self) -> str :
         return self.nome
@@ -22,3 +23,6 @@ class Item:
 
     def diminuiQtd(self) -> None:
             self.qtd -= 1
+
+    def restore(self) -> None:
+        self.qtd = self.qtdMax
