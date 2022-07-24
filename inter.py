@@ -53,17 +53,25 @@ class PlayerInterface:
         p1b.grid(row=1, column=0)
         p2b.grid(row=1, column=80)
         
-        self.liu_image = PhotoImage(file="images/liu.png")
+        confirmarbp1 = IntVar()
+        confirmarbp2 = IntVar()
+
         for y in range(2):
             a_column = [] # column
-            for x in range(3):
-                dliu = Label(self.message_frame, bd = 0, image=self.liu_image)
+            for x in range(5):
+                dliu = Label(self.message_frame, bd = 0, bg="gray")
                 dliu.grid(row=x+1 , column=y+1)
-        confirm_bp1 = Button(self.message_frame, font=("Arial", 10),  text="CONFIRM", bg="gray", height=2, width=15)
-        confirm_bp2 = Button(self.message_frame, font=("Arial", 10),  text="CONFIRM", bg="gray", height=2, width=15)
+        confirm_bp1 = Checkbutton(self.message_frame, font=("Arial", 10),  text="CONFIRM", bg="gray", height=2, width=15, variable=confirmarbp1, onvalue=1, offvalue=0)
+        confirm_bp2 = Checkbutton(self.message_frame, font=("Arial", 10),  text="CONFIRM", bg="gray", height=2, width=15, variable=confirmarbp2, onvalue=1, offvalue=0)
         confirm_bp1.grid(row=2, column=0)
         confirm_bp2.grid(row=2, column=80)
+        confirm_button = Button(self.message_frame, text='Validation', command=lambda: self.confirmaTela(confirmarbp1, confirmarbp1))
+        confirm_button.grid(row=3, column=70)
+        
 
+    def confirmaTela(self, confirmarbp1, confirmabp2):
+        if (confirmarbp1.get() == confirmabp2.get()):
+            print("ok")
     def print_hello(self):
         print("hello world")
 
