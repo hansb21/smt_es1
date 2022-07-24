@@ -556,13 +556,12 @@ class Batalha:
     def getJogadorOutro(self):
         return self.jogadorOutro
 
-    def createTeams(self):
-        teams = []
+    def createTeam(self):
+        team = []
         camp = []
         reserve = []
         while len(camp) < 3:
             demon = choice(self.todosDemonios)
-            print(demon)
             if demon not in camp:
                 camp.append(demon)
         while len(reserve) < 4:
@@ -570,8 +569,28 @@ class Batalha:
             if demon not in reserve and demon not in camp:
                 reserve.append(demon)
         if (len(camp)+len(reserve)) == 7:
-            teams.append(camp)
-            teams.append(reserve)
-            print(teams)
+            team.append(camp)
+            team.append(reserve)
         
-        return teams
+        return team
+
+    def createTeams(self):
+        team1 = self.createTeam()
+        team2 = self.createTeam()
+        for i in range(len(team1[0])):
+            if team1[0][i] in team2[0]:
+                    pos = team2[0].index(team1[0][i])
+                    demon = choice(self.todosDemonios)
+                    if demon not in team2[0] or demon not in team2[1]:
+                        team2[0][pos] = demon
+        
+            for i in range(len(team1[1]):
+                if team1[1][i] in team2[1]:
+                        pos = team2[1].index(team1[1][i])
+                        demon = choice(self.todosDemonios)
+                        if demon not in team2[0] or demon not in team2[1]:
+                            team2[1][pos] = demon
+        
+        return team1, team2
+
+
