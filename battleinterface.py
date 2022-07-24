@@ -4,6 +4,7 @@ from typing import TextIO
 from item import Item
 from ataque import Ataque
 from tipo import Tipo
+from entidade import Entidade
 from batalha import Batalha
 from storagebutton import StorageButton
 from displaycell import DisplayCell
@@ -529,6 +530,7 @@ class BattleInterface:
         self.updateTurnos()
 
     def telaFinal(self):
+
         self.unplaceAll()
 
         vencedor = self.batalha.getResultado()[0]
