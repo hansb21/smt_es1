@@ -1,6 +1,6 @@
 ## Para jogar
   * <b>Bibliotecas:</b>
-    * tkinter
+    * Baixar tkinter
     
  * <b>Como iniciar:</b>
     * Iniciar o main.py
