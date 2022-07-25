@@ -281,9 +281,6 @@ class Batalha:
         self.j1 = Jogador("1", self.time1, True, False, True, self.itens1, 10)
         self.j2 = Jogador("2", self.time2, True, False, True, self.itens1, 10)
 
-    def iniciar(self) -> None:
-        pass
-
     def sorteiaJogador(self) -> None:
         res = randint(1,2)
         if res == 1:
@@ -312,39 +309,6 @@ class Batalha:
         item.diminuiQtd()
         self.calcularTurnos("item", "", listaCampoCells, atualCell)
 
-    def iniciarBatalha(self) -> None:
-        pass
-
-    def escolherHumanos(self) -> None:
-        pass
-
-    def getHumanos(self, index: int) -> Entidade:
-        pass
-
-    def incluirHumano1(self, escolha: Entidade) -> None:
-        pass
-
-    def incluirHumano2(self, escolha: Entidade) -> None:
-        pass
-
-    def escolherDemonios(self) -> None:
-        pass
-
-    def getDemonio(self, index: int) -> Entidade:
-        pass
-
-    def incluirDemonio1(self, escolha: Entidade) -> None:
-        pass
-
-    def incluirDemonio2(self, escolha: Entidade) -> None:
-        pass
-
-    def escolherItem(self) -> int:
-        pass
-
-    def selecionarAlvoitem(itemIndex: int, local: int, entidadeIndex: int) -> list:
-        pass
-
     def invocar(self, cell1, cell2, listaCampoCells, atualCell) -> None:
         tempEnt = cell1.getEntidade()
         cell1.setEntidade(cell2.getEntidade())
@@ -352,12 +316,6 @@ class Batalha:
         cell1.changeLocal()
         cell2.changeLocal()
         self.calcularTurnos("invocar", "", listaCampoCells, atualCell)
-
-    def definirTrocaReserva(self, index: int) -> int:
-        pass
-
-    def definirTrocaCampo(self, index: int, vazio: bool) -> int:
-        pass
 
     def calcularTurnos(self, caso: str, resAtaque: str, listaCampoCells: list, atualCell) -> None:
         custoAtaque = 0
@@ -434,17 +392,11 @@ class Batalha:
         self.jogadorAtual = self.jogadorOutro
         self.jogadorOutro = temp
 
-    def ataque(self) -> None:
-        pass
-
     def validarAtaque(self, ataque, atacante) -> None:
         if atacante.getMpAtual() < ataque.getCusto():
             return False
         else:
             return True
-
-    def definirAlvo(self, index: int) -> None:
-        pass
 
     def avaliarAtaque(self, tipoAtaque: Tipo, tipoAlvo: Tipo) -> str:
         if tipoAtaque.getNome() == tipoAlvo.getFraqueza():
@@ -506,25 +458,6 @@ class Batalha:
 
         self.calcularTurnos("fusao", "", listaCampoCells, atualCell)
 
-    def definirFusão1(self, material: Entidade, local: int) -> None:
-        pass
-
-
-    def definirFusão2(self, material: Entidade, local: int) -> None:
-        pass
-
-    def validarFusao(self, material1: Entidade, material2: Entidade) -> bool:
-        pass
-
-    def definirResultado(self, material1: Entidade, material2: Entidade, local: int) -> Entidade:
-        pass
-
-    def definirLocalFusao(self, local1: int, local2: int) -> int:
-        pass
-
-    def avaliaVencedor(self) -> None:
-        pass
-
     def verificaVencedor(self) -> Boolean:
         timeAtual = self.jogadorAtual.getTimeInteiro()
         print("TIME ATUAL:")
@@ -565,12 +498,6 @@ class Batalha:
             return True
 
         return False
-
-    def defineEscolha(escolha: str) -> None:
-        pass
-
-    def executaEscolha(escolha: str) -> None:
-        pass
 
     def getJogadorAtual(self):
         return self.jogadorAtual
