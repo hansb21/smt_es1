@@ -358,7 +358,6 @@ class Batalha:
             custoAtaque = self.calculaCustoAtaque(resAtaque)
         custoTurno = self.calculaCustoTurno(caso, custoAtaque)
         self.jogadorAtual.diminuiTurnos(custoTurno)
-        self.interface.setAtaques(self.interface.atualCell.getEntidade().getAtaques())
         if not self.verificaVencedor():
             if self.jogadorAtual.getTurnos() <= 0:
                 self.jogadorAtual.setTurnos(10)
@@ -366,6 +365,7 @@ class Batalha:
                 self.interface.resetJogadores()
                 self.atualIndex = 0
             self.mudaEntidadeAtual(listaCampoCells, atualCell)
+            self.interface.setAtaques(self.interface.getAtualCell().getEntidade().getAtaques())
         else:
             self.interface.telaFinal()
 

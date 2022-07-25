@@ -660,3 +660,6 @@ class BattleInterface:
                 widget.place_forget()
         for widget in self.message_frame.place_slaves():
                 widget.place_forget()
+
+    def getAtualCell(self):
+        return self.atualCell
