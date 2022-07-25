@@ -580,7 +580,7 @@ class BattleInterface:
         sair = Button(telaFinalFrame, text = "Sair", command=self.main_window.destroy)
 
         novamente.place(relx=0.45, rely=0.45, relwidth=0.2, relheight=0.1)
-        mudar.place(relx=0.45, rely=0.60, relwidth=0.2, relheight=0.1)
+        #mudar.place(relx=0.45, rely=0.60, relwidth=0.2, relheight=0.1)
         sair.place(relx=0.45, rely=0.75, relwidth=0.2, relheight=0.1)
 
         self.table_frame.destroy()
