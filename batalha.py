@@ -536,7 +536,7 @@ class Batalha:
             print("Jogador Outro ganhou!")
             self.vencedor = self.jogadorOutro
             self.perdedor = self.jogadorAtual
-            self.interface.telaFinal()
+            return True
 
         humanoMorto = False
         demoniosMortos = 0

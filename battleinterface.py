@@ -576,12 +576,16 @@ class BattleInterface:
         perdedorHumano.place(relx=0.625, rely=0.4, relheight=0.6, relwidth=0.25)
 
         novamente = Button(telaFinalFrame, text="Jogar novamente", command=self.iniciar)
-        mudar = Button(telaFinalFrame, text = "Mudar times")
+        mudar = Button(telaFinalFrame, text = "Mudar times", command=lambda: self.fill_character())
         sair = Button(telaFinalFrame, text = "Sair", command=self.main_window.destroy)
 
-        novamente.place(relx=0.45, rely=0.45, relwidth=0.1, relheight=0.1)
-        mudar.place(relx=0.45, rely=0.60, relwidth=0.1, relheight=0.1)
-        sair.place(relx=0.45, rely=0.75, relwidth=0.1, relheight=0.1)
+        novamente.place(relx=0.45, rely=0.45, relwidth=0.2, relheight=0.1)
+        mudar.place(relx=0.45, rely=0.60, relwidth=0.2, relheight=0.1)
+        sair.place(relx=0.45, rely=0.75, relwidth=0.2, relheight=0.1)
+
+        self.table_frame.destroy()
+        self.message_frame.destroy()
+
     
     def fill_main_window(self):
         # Título, ícone, dimensionamento e fundo da janela
@@ -616,6 +620,7 @@ class BattleInterface:
 
     def fill_character(self):
         
+        self.unplaceAll()
         self.table_frame.destroy()
         self.message_frame.destroy()
         self.table_frame = Frame(self.main_window, padx=100, pady=25, bg="gray")
