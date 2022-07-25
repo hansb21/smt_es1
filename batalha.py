@@ -8,7 +8,7 @@ from entidade import Entidade
 from ataque import Ataque
 from tkinter import PhotoImage
 from team import Time
-from random import randint
+from random import randint, choice
 
 class Batalha:
     def __init__(self, interface):
@@ -257,20 +257,27 @@ class Batalha:
         self.itens1 = [self.item1, self.item2, self.item3, self.item4, self.item5, self.item6]
 
     def defineTimes(self):
+        self.team12 = []
         self.time1_demos = [self.e1, self.e2, self.e3, self.e4]
-        self.time1 = Time(self.h1, [], self.time1_demos)
+        self.team12.append(Time(self.h1, [], self.time1_demos))
 
         self.time2_demos = [self.e5, self.e6, self.e7, self.e8]
-        self.time2 = Time(self.h2, [], self.time2_demos)
+        self.team12.append(Time(self.h2, [], self.time2_demos))
 
         self.time3_demos = [self.e9, self.e10, self.e11, self.e12]
-        self.time3 = Time(self.h3, [], self.time3_demos)
+        self.team12.append(Time(self.h3, [], self.time3_demos))
 
         self.time4_demos = [self.e13, self.e14, self.e15, self.e16]
-        self.time4 = Time(self.h4, [], self.time4_demos)
+        self.team12.append(Time(self.h4, [], self.time4_demos))
 
     #Só para teste, remover depois
     def jogadoresTeste(self):
+        self.time1 = choice(self.team12)
+        self.time2 = choice(self.team12)
+        if self.time1.humano == self.time2.humano:
+            possible_choices = [v for v in self.team12 if v != self.time1]
+            self.time2 = choice(self.team12)
+        
         self.j1 = Jogador("1", self.time1, True, False, True, self.itens1, 10)
         self.j2 = Jogador("2", self.time2, True, False, True, self.itens1, 10)
 
